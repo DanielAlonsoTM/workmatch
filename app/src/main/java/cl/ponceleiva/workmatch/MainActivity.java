@@ -26,8 +26,8 @@ import cl.ponceleiva.workmatch.Utils.Constants;
 
 public class MainActivity extends AppCompatActivity {
 
-    //    private String currentUserId = "MilpZSzXqRX5ggZt4AX6pMBcTSq1";
-//    private String currentUserEmail = "danielinogordo@gmail.com";
+    //private String currentUserId = "MilpZSzXqRX5ggZt4AX6pMBcTSq1";
+    //private String currentUserEmail = "danielinogordo@gmail.com";
     private String currentUserId = "PavGvxyR0RVkgDV6Tnl6xKDudF42";
     private String currentUserEmail = "test@gmail.com";
     private String typeUserInterested;
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getData(List<Card> cards) {
+    private void getData(@NonNull List<Card> cards) {
         if (!cards.isEmpty() && cards != null) {
             Log.d(constants.LIST, cards.size() + " elementos en la lista");
             CardsAdapter cardsAdapter = new CardsAdapter(cards, this);
@@ -132,37 +132,43 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private void addDocument(Card card, String collectionName, String message) {
-        Map<String, Object> like = new HashMap<>();
-        like.put("userid", card.userId);
-        like.put("date", timestamp);
-        try {
-            firebaseFirestore.collection("Users").document(currentUserId).collection(collectionName).add(like);
-            toastMessage(message);
-            Log.d(constants.FIRESTORE, "Documento creado");
-        } catch (Exception ex) {
-            Log.w(constants.FIRESTORE, "Error al crear documento. Detalle: \n" + ex);
-        }
-    }
-
-    private void checkMatch(final Card card) {
+    private void checkMatch(final @NonNull Card card) {
         //Checkear en la lista del usuario B (al que se dio like), si el usuario A (usuario de la sesión actual)
         firebaseFirestore.collection("Users").document(card.userId).collection("likes").whereEqualTo("userid", currentUserId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-
                     Log.d(constants.FIRESTORE, "Cantidad de cooincidencias: " + task.getResult().size());
 
                     if (task.getResult().size() == 1 && task.getResult() != null) {
-                        addDocument(card, "matches","Maaatch!");
+                        addDocument(card, "matches", "Maaatch!");
                     } else if (task.getResult().size() == 0 && task.getResult() != null) {
-                        addDocument(card, "likes","Likeeeeee!");
+                        addDocument(card, "likes", "Likeeeeee!");
                     } else {
                         Log.w(constants.FIRESTORE, "Ocurrio un problema con el documento actual");
                     }
                 }
             }
         });
+    }
+
+    private void addDocument(@NonNull Card card, String collectionName, String message) {
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("userid", card.userId);
+        objectMap.put("date", timestamp);
+
+        try {
+            firebaseFirestore.collection("Users").document(currentUserId).collection(collectionName).add(objectMap);
+
+            //Se añade documento a usuario con el que se dio match. --> Redactar mejor xd
+            if (collectionName.equals("matches")) {
+                firebaseFirestore.collection("Users").document(card.userId).collection(collectionName).add(objectMap);
+            }
+
+            toastMessage(message);
+            Log.d(constants.FIRESTORE, "Documento/s creado");
+        } catch (Exception ex) {
+            Log.w(constants.FIRESTORE, "Error al crear documento. Detalle: \n" + ex);
+        }
     }
 }
