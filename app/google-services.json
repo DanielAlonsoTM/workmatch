@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "506073534138",
+    "firebase_url": "https://workmatch-6ef06.firebaseio.com",
+    "project_id": "workmatch-6ef06",
+    "storage_bucket": "workmatch-6ef06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506073534138:android:74f48e6dfd59080e",
+        "android_client_info": {
+          "package_name": "cl.ponceleiva.workmatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506073534138-fl48bjumhenjrejojier08acpn1rccr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH8iYr7bSwaHB1hAXN8VHzqIMqtz1ySg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506073534138-fl48bjumhenjrejojier08acpn1rccr6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506073534138:android:c6cf8768fc265c02",
+        "android_client_info": {
+          "package_name": "com.ponceleiva.workmatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506073534138-qm54atun5hlh03bjofnbh8j4tq7iu6m3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ponceleiva.workmatch",
+            "certificate_hash": "15ae8481fd68a52870e320105f9fe8b5a08d556c"
+          }
+        },
+        {
+          "client_id": "506073534138-fl48bjumhenjrejojier08acpn1rccr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH8iYr7bSwaHB1hAXN8VHzqIMqtz1ySg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506073534138-fl48bjumhenjrejojier08acpn1rccr6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
