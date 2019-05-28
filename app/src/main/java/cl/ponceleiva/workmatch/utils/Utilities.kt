@@ -1,9 +1,13 @@
 package cl.ponceleiva.workmatch.utils
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import cl.ponceleiva.workmatch.R
 
 
 fun logD(tag: String, message: String) {
@@ -18,17 +22,11 @@ fun toastMessage(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
-//private fun hideSystemUI() {
-//    // Enables regular immersive mode.
-//    // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-//    // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//    window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-//            // Set the content to appear under the system bars so that the
-//            // content doesn't resize when the system bars hide and show.
-//            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//            // Hide the nav bar and status bar
-//            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//            or View.SYSTEM_UI_FLAG_FULLSCREEN)
-//}
+fun changeColorNotificationBar(context: Context, window: Window) {
+    // clear FLAG_TRANSLUCENT_STATUS flag:
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+    // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    // finally change the color
+    window.setStatusBarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+}

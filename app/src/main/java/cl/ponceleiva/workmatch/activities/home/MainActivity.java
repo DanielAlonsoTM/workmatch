@@ -27,12 +27,6 @@ import static cl.ponceleiva.workmatch.utils.Constants.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private String currentUserId = "MilpZSzXqRX5ggZt4AX6pMBcTSq1";
-    //private String currentUserEmail = "danielinogordo@gmail.com";
-    private String currentUserId = "PavGvxyR0RVkgDV6Tnl6xKDudF42";
-    private String currentUserEmail = "test@gmail.com";
-    private String typeUserInterested;
-
     private Date date = new Date();
     private Timestamp timestamp = new Timestamp(date);
 
@@ -44,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
+    private String currentUserId;
+    private String currentUserEmail;
+    private String typeUserInterested;
+
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    mTextMessage.setText(R.string.title_profile);
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
@@ -64,22 +63,32 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
+    public void onStart() {
+        super.onStart();
+        currentUserId = getIntent().getStringExtra("userUid");
+        currentUserEmail = getIntent().getStringExtra("userEmail");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        UtilitiesKt.changeColorNotificationBar(this, getWindow());
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_login));
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_actionbar));
 
         swipeCardsView = findViewById(R.id.swipe_cards);
         swipeCardsView.retainLastCard(false);
         swipeCardsView.enableSwipe(true);
 
-//        typeUserInterested = "Empleador";
-        typeUserInterested = "Profesional";
+        typeUserInterested = "Empleador";
+//        typeUserInterested = "Profesional";
 
         firebaseFirestore.collection("Users").whereEqualTo("typeUser", typeUserInterested).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

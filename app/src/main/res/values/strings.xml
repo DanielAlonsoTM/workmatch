@@ -1,20 +1,25 @@
 <resources>
     <string name="app_name">WorkMatch</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Notificaciones</string>
+    <string name="title_profile">Perfil</string>
     <string name="title_activity_login">Sign in</string>
-    <!-- Strings related to login -->
+    <!-- Strings related to login or Register-->
+    <string name="promp_name">Nombre</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_register">Register now</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Iniciar Sesión</string>
+    <string name="action_register">Registrarse Ahora</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_email">La dirección de email no es valida</string>
+    <string name="error_invalid_password">La contraseña es demasiado corta</string>
+    <string name="error_incorrect_password">La contraseña es incorrecta</string>
+    <string name="error_field_required">Este campo es obligatorio</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
-<!--  FirebaseAuth  -->
-    <string name="default_web_client_id_app">506073534138-fl48bjumhenjrejojier08acpn1rccr6.apps.googleusercontent.com</string>
+    <string name="label_radio_group">Seleccionar tipo de usuario</string>
+    <string name="radio_employee">Profesional</string>
+    <string name="radio_employer">Empleador</string>
+    <!--  FirebaseAuth  -->
+    <string name="default_web_client_id_app">506073534138-fl48bjumhenjrejojier08acpn1rccr6.apps.googleusercontent.com
+    </string>
 </resources>
