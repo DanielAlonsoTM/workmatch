@@ -1,17 +1,18 @@
-package cl.ponceleiva.workmatch;
+package cl.ponceleiva.workmatch.activities.home;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-import cl.ponceleiva.workmatch.Adapter.CardsAdapter;
-import cl.ponceleiva.workmatch.Model.Card;
+import cl.ponceleiva.workmatch.adapter.CardsAdapter;
+import cl.ponceleiva.workmatch.model.Card;
 
+import cl.ponceleiva.workmatch.R;
+import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -22,7 +23,7 @@ import com.huxq17.swipecardsview.SwipeCardsView;
 
 import java.util.*;
 
-import cl.ponceleiva.workmatch.Utils.Constants;
+import static cl.ponceleiva.workmatch.utils.Constants.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private String currentUserEmail = "test@gmail.com";
     private String typeUserInterested;
 
-    private Constants constants = new Constants();
-
     private Date date = new Date();
     private Timestamp timestamp = new Timestamp(date);
 
@@ -41,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private List<Card> cardList = new ArrayList<>();
 
     private TextView mTextMessage;
+    private ActionBar actionBar;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -72,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_login));
+
         swipeCardsView = findViewById(R.id.swipe_cards);
         swipeCardsView.retainLastCard(false);
         swipeCardsView.enableSwipe(true);
@@ -85,12 +87,12 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                         if (!documentSnapshot.get("email").equals(currentUserEmail)) {
-                            Log.d("SUCCESS", documentSnapshot.getId());
+                            UtilitiesKt.logD(SUCCESS, documentSnapshot.getId());
                             cardList.add(new Card(documentSnapshot.get("name").toString(), documentSnapshot.get("profileImageUrl").toString(), documentSnapshot.getId()));
                         }
                     }
                 } else {
-                    Log.w("ERROR", "No se puede obtener la data");
+                    UtilitiesKt.logE(ERROR,"No se puede obtener la data");
                 }
                 getData(cardList);
             }
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData(@NonNull List<Card> cards) {
         if (!cards.isEmpty() && cards != null) {
-            Log.d(constants.LIST, cards.size() + " elementos en la lista");
+            UtilitiesKt.logD(LIST,cards.size() + " elementos en la lista");
             CardsAdapter cardsAdapter = new CardsAdapter(cards, this);
             swipeCardsView.setAdapter(cardsAdapter);
             swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onCardVanish(int index, SwipeCardsView.SlideType type) {
                     switch (type) {
                         case LEFT:
-                            toastMessage("Nope!");
+                            UtilitiesKt.toastMessage(getApplicationContext(), "Nope!");
                             break;
                         case RIGHT:
                             checkMatch(cardList.get(index));
@@ -124,12 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Log.d("LOAD", "Loading...");
+            UtilitiesKt.logD(LOAD, "Loading...");
         }
-    }
-
-    private void toastMessage(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     private void checkMatch(final @NonNull Card card) {
@@ -138,21 +136,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    Log.d(constants.FIRESTORE, "Cantidad de cooincidencias: " + task.getResult().size());
-
+                    UtilitiesKt.logD(FIRESTORE, "Cantidad de cooincidencias: " + task.getResult().size());
                     if (task.getResult().size() == 1 && task.getResult() != null) {
-                        addDocument(card, "matches", "Maaatch!");
+                        addUserActionDocument(card, "matches", "Maaatch!");
                     } else if (task.getResult().size() == 0 && task.getResult() != null) {
-                        addDocument(card, "likes", "Likeeeeee!");
+                        addUserActionDocument(card, "likes", "Likeeeeee!");
                     } else {
-                        Log.w(constants.FIRESTORE, "Ocurrio un problema con el documento actual");
+                        UtilitiesKt.logE(FIRESTORE, "Ocurrio un problema con el documento actual");
                     }
                 }
             }
         });
     }
 
-    private void addDocument(@NonNull Card card, String collectionName, String message) {
+    private void addUserActionDocument(@NonNull Card card, String collectionName, String message) {
         Map<String, Object> objectMap = new HashMap<>();
         objectMap.put("userid", card.userId);
         objectMap.put("date", timestamp);
@@ -164,11 +161,10 @@ public class MainActivity extends AppCompatActivity {
             if (collectionName.equals("matches")) {
                 firebaseFirestore.collection("Users").document(card.userId).collection(collectionName).add(objectMap);
             }
-
-            toastMessage(message);
-            Log.d(constants.FIRESTORE, "Documento/s creado");
+            UtilitiesKt.logD(FIRESTORE,"Documento/s creado");
+            UtilitiesKt.toastMessage(getApplicationContext(), message);
         } catch (Exception ex) {
-            Log.w(constants.FIRESTORE, "Error al crear documento. Detalle: \n" + ex);
+            UtilitiesKt.logE(FIRESTORE,"Error al crear documento. Detalle: \n" + ex);
         }
     }
 }

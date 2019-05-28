@@ -1,4 +1,4 @@
-package cl.ponceleiva.workmatch.Model;
+package cl.ponceleiva.workmatch.model;
 
 public class Card {
 

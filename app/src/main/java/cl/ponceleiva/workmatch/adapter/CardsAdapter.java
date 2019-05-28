@@ -1,18 +1,15 @@
-package cl.ponceleiva.workmatch.Adapter;
+package cl.ponceleiva.workmatch.adapter;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import cl.ponceleiva.workmatch.R;
+import cl.ponceleiva.workmatch.model.Card;
 import com.huxq17.swipecardsview.BaseCardAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import cl.ponceleiva.workmatch.Model.Card;
-import cl.ponceleiva.workmatch.R;
-import com.squareup.picasso.Picasso;
 
 public class CardsAdapter extends BaseCardAdapter {
 
