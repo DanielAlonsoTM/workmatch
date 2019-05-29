@@ -6,6 +6,7 @@ object Constants {
     const val LOAD = "LOAD"
     const val GOOGLE_SIGN_IN = "GOOGLE SIGN IN"
     const val FIRESTORE = "FIRESTORE"
+    const val FIREBASEAUTH = "FIREBASEAUTH"
     const val LIST = "LIST"
 }
 

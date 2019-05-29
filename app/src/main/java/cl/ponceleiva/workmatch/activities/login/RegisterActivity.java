@@ -1,11 +1,14 @@
 package cl.ponceleiva.workmatch.activities.login;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import cl.ponceleiva.workmatch.R;
+import cl.ponceleiva.workmatch.activities.home.MainActivity;
+import cl.ponceleiva.workmatch.utils.Constants;
 import cl.ponceleiva.workmatch.utils.FirebaseUtilsKt;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
                             UtilitiesKt.toastMessage(getApplicationContext(), "Sign up Error");
+                            UtilitiesKt.logE(Constants.FIREBASEAUTH, task.getResult().toString());
                         } else {
                             HashMap<String, Object> userData = new HashMap<>();
                             userData.put("name", name);
@@ -68,6 +72,10 @@ public class RegisterActivity extends AppCompatActivity {
                             userData.put("profileImageUrl", "default");
 
                             FirebaseUtilsKt.createUser(userData, mAuth.getUid());
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            intent.putExtra("userUid", mAuth.getUid());
+                            intent.putExtra("userEmail", name);
+                            startActivity(intent);
                         }
                     }
                 });
