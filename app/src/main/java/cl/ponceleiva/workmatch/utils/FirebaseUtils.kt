@@ -1,18 +1,18 @@
 package cl.ponceleiva.workmatch.utils
 
-import android.app.Activity
 import cl.ponceleiva.workmatch.model.Card
 import cl.ponceleiva.workmatch.utils.Constants.FIRESTORE
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import android.content.Context
-import cl.ponceleiva.workmatch.activities.home.MainActivity
+import android.content.SharedPreferences
+import cl.ponceleiva.workmatch.utils.Constants.ERROR
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.QuerySnapshot
 import kotlin.collections.HashMap
 
+val PREFS_NAME = "workmatch"
 val db = FirebaseFirestore.getInstance()
 private val date = Date()
 
@@ -64,5 +64,26 @@ private fun addUserActionDocument(card: Card, collectionName: String, message: S
         toastMessage(context, message)
     } catch (ex: Exception) {
         logE(FIRESTORE, "Error al crear documento. Detalle: \n$ex")
+    }
+}
+
+fun getTypeUser(userId: String,context: Context) {
+    var typeUser: String = "No definido"
+
+    val sharedPref: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    db.collection("Users").document(userId).get().addOnSuccessListener { documentSnapshot ->
+        if (documentSnapshot != null) {
+            val editor: SharedPreferences.Editor = sharedPref.edit()
+            editor.putString("typeUser", documentSnapshot["typeUser"].toString())
+            editor.commit()
+        } else {
+            logE("TEST", "Error")
+        }
+    }
+
+    try {
+        typeUser = sharedPref.getString("typeUser",null)
+    } catch (e: java.lang.Exception) {
+        logE(ERROR,"Error en obtención de tipo de usario. Detalle:\n$e")
     }
 }

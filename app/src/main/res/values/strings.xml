@@ -22,4 +22,8 @@
     <!--  FirebaseAuth  -->
     <string name="default_web_client_id_app">506073534138-fl48bjumhenjrejojier08acpn1rccr6.apps.googleusercontent.com
     </string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="action_settings">Settings</string>
+    <!--    Chat    -->
+    <string name="label_chat_text">Escribe aquí</string>
 </resources>

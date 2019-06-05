@@ -1,6 +1,9 @@
 package cl.ponceleiva.workmatch.activities.home;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,17 +11,19 @@ import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import cl.ponceleiva.workmatch.activities.chat.ChatActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
 
 import cl.ponceleiva.workmatch.R;
+import cl.ponceleiva.workmatch.utils.FirebaseUtilsKt;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.*;
 import com.huxq17.swipecardsview.SwipeCardsView;
 
 import java.util.*;
@@ -37,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
     private ActionBar actionBar;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     private String currentUserId;
     private String currentUserEmail;
+    private String typeUser;
     private String typeUserInterested;
+    private SharedPreferences sharedPreferences;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -50,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_home);
+                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_profile);
@@ -65,8 +74,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        currentUserId = getIntent().getStringExtra("userUid");
-        currentUserEmail = getIntent().getStringExtra("userEmail");
+//        currentUserId = getIntent().getStringExtra("userUid");
+//        currentUserEmail = getIntent().getStringExtra("userEmail");
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+
+        currentUserId = firebaseAuth.getUid();
+        currentUserEmail = firebaseAuth.getCurrentUser().getEmail();
+//        typeUser = FirebaseUtilsKt.getTypeUser(currentUserId, getApplicationContext());
+//        FirebaseUtilsKt.getTypeUser(currentUserId, getApplicationContext());
+//        typeUser = sharedPreferences.getString("typeUser", null);
+
+//        try {
+//            switch (typeUser) {
+//                case "Empleador":
+//                    typeUserInterested = "Profesional";
+//                    break;
+//                case "Profesional":
+//                    typeUserInterested = "Empleador";
+//                    break;
+//            }
+//        } catch (Exception e) {
+//            UtilitiesKt.logE(ERROR, "No se pudo obtener datos de tipo de usuario. Consulte log.");
+//        }
     }
 
     @Override
@@ -88,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
         swipeCardsView.enableSwipe(true);
 
         typeUserInterested = "Empleador";
+//        UtilitiesKt.logD("TEST-TipoUsuario", typeUserInterested);
+//        System.out.println(typeUserInterested);
 //        typeUserInterested = "Profesional";
 
         firebaseFirestore.collection("Users").whereEqualTo("typeUser", typeUserInterested).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -101,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    UtilitiesKt.logE(ERROR,"No se puede obtener la data");
+                    UtilitiesKt.logE(ERROR, "No se puede obtener la data");
                 }
                 getData(cardList);
             }
@@ -110,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData(@NonNull List<Card> cards) {
         if (!cards.isEmpty() && cards != null) {
-            UtilitiesKt.logD(LIST,cards.size() + " elementos en la lista");
+            UtilitiesKt.logD(LIST, cards.size() + " elementos en la lista");
             CardsAdapter cardsAdapter = new CardsAdapter(cards, this);
             swipeCardsView.setAdapter(cardsAdapter);
             swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {
@@ -170,10 +201,10 @@ public class MainActivity extends AppCompatActivity {
             if (collectionName.equals("matches")) {
                 firebaseFirestore.collection("Users").document(card.userId).collection(collectionName).add(objectMap);
             }
-            UtilitiesKt.logD(FIRESTORE,"Documento/s creado");
+            UtilitiesKt.logD(FIRESTORE, "Documento/s creado");
             UtilitiesKt.toastMessage(getApplicationContext(), message);
         } catch (Exception ex) {
-            UtilitiesKt.logE(FIRESTORE,"Error al crear documento. Detalle: \n" + ex);
+            UtilitiesKt.logE(FIRESTORE, "Error al crear documento. Detalle: \n" + ex);
         }
     }
 }
