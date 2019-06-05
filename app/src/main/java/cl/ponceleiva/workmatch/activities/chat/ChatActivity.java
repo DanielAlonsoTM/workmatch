@@ -45,6 +45,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (!text.isEmpty()) {
                     messages.add(text);
                     adapter.notifyDataSetChanged();
+                    listView.smoothScrollToPosition(messages.size()+1);
                     message.getText().clear();
                 }
             }
