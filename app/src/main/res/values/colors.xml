@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorPrimaryLight">#008599</color>
+    <color name="colorPrimary">#68B1C4</color>
+    <color name="colorPrimaryDark">#1B8FAE</color>
+    <color name="colorPrimaryLight">#A0CEDA</color>
     <color name="colorAccent">#ffaa00</color>
     <color name="colorLoginBottom">#2F3237</color>
     <color name="colorBackground">#f5f5f5</color>
+    <color name="colorTransparent">#0000ffff</color>
 <!--    Login fonts-->
     <color name="colorLoginFont">#ffff</color>
 </resources>

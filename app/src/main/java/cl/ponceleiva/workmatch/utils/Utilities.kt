@@ -23,20 +23,28 @@ fun toastMessage(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
-fun changeFullColorAppBar(context: Context, window: Window, actBar: ActionBar, resoruces: Resources) {
+fun changeFullColorAppBar(context: Context, window: Window, actBar: ActionBar, resources: Resources) {
     // clear FLAG_TRANSLUCENT_STATUS flag:
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     // finally change the color
-    window.setStatusBarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+    window.statusBarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
 
     val actionBar: ActionBar = actBar
-    actionBar.setBackgroundDrawable(resoruces.getDrawable(R.drawable.gradient_actionbar))
+    actionBar.setBackgroundDrawable(resources.getDrawable(R.drawable.gradient_actionbar))
+
+    actionBar.displayOptions = android.app.ActionBar.DISPLAY_SHOW_CUSTOM
+
+    if (context.javaClass.name.contains("MainActivity")) {
+        actionBar.setCustomView(R.layout.actionbar_custom)
+    } else {
+        actionBar.setCustomView(R.layout.actionbar_custom_others)
+    }
 }
 
 fun changeColorInitialsViews(context: Context, window: Window) {
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-    window.setStatusBarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+    window.statusBarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
 }

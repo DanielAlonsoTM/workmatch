@@ -24,6 +24,9 @@
     </string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="action_settings">Settings</string>
-    <!--    Chat    -->
+    <!--    Chat        -->
     <string name="label_chat_text">Escribe aquí</string>
+    <!--    ActionBar   -->
+    <string name="actbar_settings">Configuración</string>
+    <string name="actbar_messages">Mensajes</string>
 </resources>

@@ -16,6 +16,7 @@ public class ChatActivity extends AppCompatActivity {
     private EditText message;
     private FloatingActionButton fab;
     private ListView listView;
+    private ImageButton backButton;
 
     private List<String> messages;
 
@@ -29,6 +30,7 @@ public class ChatActivity extends AppCompatActivity {
         message = findViewById(R.id.edit_text_message);
         fab = findViewById(R.id.fab_send_message);
         listView = findViewById(R.id.list_messages);
+        backButton = findViewById(R.id.actionbar_back);
 
         messages = new ArrayList<>();
 
@@ -53,5 +55,13 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 }
