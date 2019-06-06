@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.activities.chat.ChatActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
@@ -35,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private SwipeCardsView swipeCardsView;
     private List<Card> cardList = new ArrayList<>();
 
-    private TextView mTextMessage;
+    private ImageButton messagesButton;
+
+    private ProgressBar progressBar;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -53,14 +57,10 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_profile);
                     return true;
                 case R.id.navigation_messages:
-                    mTextMessage.setText(R.string.title_messages);
-                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
                     return true;
             }
             return false;
@@ -102,9 +102,11 @@ public class MainActivity extends AppCompatActivity {
         UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar(), getResources());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        mTextMessage = findViewById(R.id.message);
+        messagesButton = findViewById(R.id.actionbar_messages);
+
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        progressBar = findViewById(R.id.progress_bar);
         swipeCardsView = findViewById(R.id.swipe_cards);
         swipeCardsView.retainLastCard(false);
         swipeCardsView.enableSwipe(true);
@@ -130,10 +132,21 @@ public class MainActivity extends AppCompatActivity {
                 getData(cardList);
             }
         });
+
+        messagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ChatActivity.class));
+            }
+        });
+
     }
 
     private void getData(@NonNull List<Card> cards) {
         if (!cards.isEmpty() && cards != null) {
+
+            progressBar.setVisibility(View.GONE);
+
             UtilitiesKt.logD(LIST, cards.size() + " elementos en la lista");
             CardsAdapter cardsAdapter = new CardsAdapter(cards, this);
             swipeCardsView.setAdapter(cardsAdapter);

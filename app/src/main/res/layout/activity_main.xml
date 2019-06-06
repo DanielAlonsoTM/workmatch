@@ -9,28 +9,31 @@
         tools:context=".activities.home.MainActivity"
         android:background="@color/colorBackground">
 
-    <TextView
-            android:id="@+id/message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/title_home"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?actionBarSize">
         <com.huxq17.swipecardsview.SwipeCardsView
                 android:id="@+id/swipe_cards"
+                android:layout_margin="10dp"
                 android:background="#f3f3f3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="match_parent">
         </com.huxq17.swipecardsview.SwipeCardsView>
+
     </RelativeLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+        <ProgressBar
+                android:id="@+id/progress_bar"
+                android:indeterminateDrawable="@drawable/shape_ring"
+                android:layout_height="100dp"
+                android:layout_width="100dp"
+                android:layout_gravity="center"/>
+    </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView
             android:id="@+id/nav_view"

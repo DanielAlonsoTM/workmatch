@@ -12,7 +12,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
-            android:src="@drawable/ic_action_message_dark"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_action_nearme_dark"
             android:background="@color/colorTransparent"/>
 
     <TextView android:id="@+id/tvTitle"
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/ic_action_settings_dark"
             android:background="@color/colorTransparent"/>
 </RelativeLayout>
