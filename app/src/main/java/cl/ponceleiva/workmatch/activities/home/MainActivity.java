@@ -16,10 +16,8 @@ import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
 
 import cl.ponceleiva.workmatch.R;
-import cl.ponceleiva.workmatch.utils.FirebaseUtilsKt;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,13 +56,13 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_home);
-                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_profile);
                     return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                case R.id.navigation_messages:
+                    mTextMessage.setText(R.string.title_messages);
+                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
                     return true;
             }
             return false;
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        UtilitiesKt.changeColorNotificationBar(this, getWindow());
+        UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar(), getResources());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);

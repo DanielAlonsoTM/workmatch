@@ -5,6 +5,7 @@
     <color name="colorPrimaryLight">#008599</color>
     <color name="colorAccent">#ffaa00</color>
     <color name="colorLoginBottom">#2F3237</color>
+    <color name="colorBackground">#f5f5f5</color>
 <!--    Login fonts-->
     <color name="colorLoginFont">#ffff</color>
 </resources>

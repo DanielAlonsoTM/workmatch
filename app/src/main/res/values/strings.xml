@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">WorkMatch</string>
-    <string name="title_home">Home</string>
-    <string name="title_notifications">Notificaciones</string>
+    <string name="title_home">Inicio</string>
+    <string name="title_messages">Mensajes</string>
     <string name="title_profile">Perfil</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login or Register-->

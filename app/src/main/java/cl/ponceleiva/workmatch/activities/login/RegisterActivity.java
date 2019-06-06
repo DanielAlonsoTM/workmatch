@@ -17,7 +17,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -33,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        UtilitiesKt.changeColorNotificationBar(getApplicationContext(), getWindow());
+        UtilitiesKt.changeColorInitialsViews(getApplicationContext(), getWindow());
 
         mAuth = FirebaseAuth.getInstance();
 
