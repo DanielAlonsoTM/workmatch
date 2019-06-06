@@ -9,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.activities.chat.ChatActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
@@ -34,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
     private Date date = new Date();
     private Timestamp timestamp = new Timestamp(date);
 
+    private RelativeLayout relativeLayout;
     private SwipeCardsView swipeCardsView;
     private List<Card> cardList = new ArrayList<>();
 
     private ImageButton messagesButton;
 
     private ProgressBar progressBar;
+    private TextView messageStatus;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private String typeUserInterested;
     private SharedPreferences sharedPreferences;
 
+    private Animation fadeIn;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -101,12 +107,16 @@ public class MainActivity extends AppCompatActivity {
 
         UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar(), getResources());
 
+        fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_tobottom);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         messagesButton = findViewById(R.id.actionbar_messages);
 
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        relativeLayout = findViewById(R.id.content_cards);
         progressBar = findViewById(R.id.progress_bar);
+        messageStatus = findViewById(R.id.text_message_status);
         swipeCardsView = findViewById(R.id.swipe_cards);
         swipeCardsView.retainLastCard(false);
         swipeCardsView.enableSwipe(true);
@@ -145,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     private void getData(@NonNull List<Card> cards) {
         if (!cards.isEmpty() && cards != null) {
 
+            relativeLayout.startAnimation(fadeIn);
             progressBar.setVisibility(View.GONE);
 
             UtilitiesKt.logD(LIST, cards.size() + " elementos en la lista");
@@ -172,7 +183,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            UtilitiesKt.logD(LOAD, "Loading...");
+            UtilitiesKt.logD(LOAD, "Lista nula o vacia");
+            String result = (cards.isEmpty()) ? "No hay elementos en la lista" : "No se pudo cargar los elementos de la lista";
+            messageStatus.setVisibility(View.VISIBLE);
+            messageStatus.setText(result);
         }
     }
 

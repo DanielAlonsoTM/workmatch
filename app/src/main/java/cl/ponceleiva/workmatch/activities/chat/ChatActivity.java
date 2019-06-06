@@ -4,6 +4,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
@@ -13,6 +15,9 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
+    private Animation animation;
+
+    private LinearLayout linearLayout;
     private EditText message;
     private FloatingActionButton fab;
     private ListView listView;
@@ -26,11 +31,15 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar(), getResources());
+        animation = AnimationUtils.loadAnimation(this, R.anim.fade_totop);
 
+        linearLayout = findViewById(R.id.linear_layout_bottom);
         message = findViewById(R.id.edit_text_message);
         fab = findViewById(R.id.fab_send_message);
         listView = findViewById(R.id.list_messages);
         backButton = findViewById(R.id.actionbar_back);
+
+        linearLayout.startAnimation(animation);
 
         messages = new ArrayList<>();
 
