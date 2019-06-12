@@ -1,18 +1,16 @@
 package cl.ponceleiva.workmatch.activities.chat;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.adapter.MatchContactAdapter;
 import cl.ponceleiva.workmatch.model.MatchContact;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
 
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ import static cl.ponceleiva.workmatch.utils.Constants.*;
 
 public class MatchListActivity extends Activity {
 
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private ArrayList<MatchContact> matchContacts = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -34,15 +33,17 @@ public class MatchListActivity extends Activity {
         setContentView(R.layout.activity_match_list);
 
         recyclerView = findViewById(R.id.recyclerView);
-
-        getDataMatches();
-
+        try {
+            getDataMatches(firebaseAuth.getUid());
+        } catch (Exception e) {
+            UtilitiesKt.logE(ERROR, "Exception in getDataMatches. Details: " + e);
+        }
     }
 
-    private void getDataMatches() {
+    private void getDataMatches(String userUid) {
         firebaseFirestore
                 .collection("Users")
-                .document("AolZSbniL0fb1sDddHTDZHAIQCu2")
+                .document(userUid)
                 .collection("likes")
                 .get()
                 .addOnCompleteListener(
@@ -72,13 +73,11 @@ public class MatchListActivity extends Activity {
                                                                             new MatchContact("", userSnapshots.get("name").toString()));
                                                                 }
                                                             }
-
                                                             MatchContactAdapter adapter = new MatchContactAdapter(matchContacts);
                                                             recyclerView.setAdapter(adapter);
                                                             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                                                         }
                                                     });
-
                                 } else {
                                     UtilitiesKt.logE(FIRESTORE, "It's not possible call bd: " + task);
                                 }
@@ -86,5 +85,4 @@ public class MatchListActivity extends Activity {
                         }
                 );
     }
-
 }
