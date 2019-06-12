@@ -37,8 +37,8 @@ public class CardsAdapter extends BaseCardAdapter {
             return;
         }
 
-        ImageView imageView = (ImageView) cardview.findViewById(R.id.imageView);
-        TextView textView = (TextView) cardview.findViewById(R.id.textView);
+        ImageView imageView = cardview.findViewById(R.id.imageView);
+        TextView textView = cardview.findViewById(R.id.textView);
         Card card = cardList.get(position);
         textView.setText(card.getTitle());
         Picasso.with(context).load(card.getImage()).into(imageView);

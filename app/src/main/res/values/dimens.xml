@@ -5,4 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="title_dimen">20sp</dimen>
     <dimen name="icon_dimen">20dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

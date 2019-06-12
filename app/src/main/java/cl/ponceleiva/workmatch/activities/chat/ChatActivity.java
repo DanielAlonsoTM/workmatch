@@ -44,7 +44,7 @@ public class ChatActivity extends AppCompatActivity {
         messages = new ArrayList<>();
 
         final ArrayAdapter adapter = new ArrayAdapter<>(this,
-                R.layout.activity_listview, messages);
+                R.layout.item_message, messages);
 
         listView.setDividerHeight(0);
         listView.setDivider(null);

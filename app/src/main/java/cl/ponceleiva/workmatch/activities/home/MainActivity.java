@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.activities.chat.ChatActivity;
+import cl.ponceleiva.workmatch.activities.chat.MatchListActivity;
+import cl.ponceleiva.workmatch.activities.login.UserTypeActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
 
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+//                    startActivity(new Intent(MainActivity.this, UserTypeActivity.class));
                     return true;
                 case R.id.navigation_dashboard:
                     return true;
@@ -108,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar(), getResources());
 
         fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_tobottom);
+        fadeIn.setDuration(1500);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         messagesButton = findViewById(R.id.actionbar_messages);
@@ -126,27 +130,31 @@ public class MainActivity extends AppCompatActivity {
 //        System.out.println(typeUserInterested);
 //        typeUserInterested = "Profesional";
 
-        firebaseFirestore.collection("Users").whereEqualTo("typeUser", typeUserInterested).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                        if (!documentSnapshot.get("email").equals(currentUserEmail)) {
-                            UtilitiesKt.logD(SUCCESS, documentSnapshot.getId());
-                            cardList.add(new Card(documentSnapshot.get("name").toString(), documentSnapshot.get("profileImageUrl").toString(), documentSnapshot.getId()));
+        firebaseFirestore
+                .collection("Users")
+                .whereEqualTo("typeUser", typeUserInterested)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                if (!documentSnapshot.get("email").equals(currentUserEmail)) {
+                                    UtilitiesKt.logD(SUCCESS, documentSnapshot.getId());
+                                    cardList.add(new Card(documentSnapshot.get("name").toString(), documentSnapshot.get("profileImageUrl").toString(), documentSnapshot.getId()));
+                                }
+                            }
+                        } else {
+                            UtilitiesKt.logE(ERROR, "No se puede obtener la data");
                         }
+                        getData(cardList);
                     }
-                } else {
-                    UtilitiesKt.logE(ERROR, "No se puede obtener la data");
-                }
-                getData(cardList);
-            }
-        });
+                });
 
         messagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                startActivity(new Intent(MainActivity.this, MatchListActivity.class));
             }
         });
 
@@ -192,21 +200,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkMatch(final @NonNull Card card) {
         //Checkear en la lista del usuario B (al que se dio like), si el usuario A (usuario de la sesión actual)
-        firebaseFirestore.collection("Users").document(card.userId).collection("likes").whereEqualTo("userid", currentUserId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    UtilitiesKt.logD(FIRESTORE, "Cantidad de cooincidencias: " + task.getResult().size());
-                    if (task.getResult().size() == 1 && task.getResult() != null) {
-                        addUserActionDocument(card, "matches", "Maaatch!");
-                    } else if (task.getResult().size() == 0 && task.getResult() != null) {
-                        addUserActionDocument(card, "likes", "Likeeeeee!");
-                    } else {
-                        UtilitiesKt.logE(FIRESTORE, "Ocurrio un problema con el documento actual");
+        firebaseFirestore
+                .collection("Users")
+                .document(card.userId)
+                .collection("likes")
+                .whereEqualTo("userid", currentUserId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            UtilitiesKt.logD(FIRESTORE, "Cantidad de cooincidencias: " + task.getResult().size());
+                            if (task.getResult().size() == 1 && task.getResult() != null) {
+                                addUserActionDocument(card, "matches", "Maaatch!");
+                            } else if (task.getResult().size() == 0 && task.getResult() != null) {
+                                addUserActionDocument(card, "likes", "Likeeeeee!");
+                            } else {
+                                UtilitiesKt.logE(FIRESTORE, "Ocurrio un problema con el documento actual");
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
     }
 
     private void addUserActionDocument(@NonNull Card card, String collectionName, String message) {
