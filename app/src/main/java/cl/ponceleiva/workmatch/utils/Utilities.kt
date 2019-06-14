@@ -29,10 +29,10 @@ fun changeFullColorAppBar(context: Context, window: Window, actBar: ActionBar, r
     // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     // finally change the color
-    window.statusBarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
+    window.statusBarColor = ContextCompat.getColor(context, R.color.colorPrimary)
 
     val actionBar: ActionBar = actBar
-    actionBar.setBackgroundDrawable(resources.getDrawable(R.drawable.gradient_actionbar))
+//    actionBar.setBackgroundDrawable(resources.getDrawable(R.drawable.gradient_actionbar))
 
     actionBar.displayOptions = android.app.ActionBar.DISPLAY_SHOW_CUSTOM
 
@@ -46,5 +46,5 @@ fun changeFullColorAppBar(context: Context, window: Window, actBar: ActionBar, r
 fun changeColorInitialsViews(context: Context, window: Window) {
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-    window.statusBarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
+    window.statusBarColor = ContextCompat.getColor(context, R.color.colorPrimary)
 }

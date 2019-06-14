@@ -10,7 +10,7 @@
                     android:useLevel="false">
                 <gradient
                         android:type="sweep"
-                        android:startColor="@color/colorPrimaryDark"
+                        android:startColor="@color/common_google_signin_btn_text_dark"
                         android:endColor="@color/colorPrimaryLight"/>
             </shape>
         </rotate>

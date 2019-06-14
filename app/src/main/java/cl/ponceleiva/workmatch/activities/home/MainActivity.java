@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-//                    startActivity(new Intent(MainActivity.this, UserTypeActivity.class));
+                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
                     return true;
                 case R.id.navigation_dashboard:
                     return true;
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            UtilitiesKt.logE(ERROR, "No se puede obtener la data");
+                            UtilitiesKt.logE(ERROR, "It's not possible get data.");
                         }
                         getData(cardList);
                     }
@@ -191,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            UtilitiesKt.logD(LOAD, "Lista nula o vacia");
-            String result = (cards.isEmpty()) ? "No hay elementos en la lista" : "No se pudo cargar los elementos de la lista";
+            UtilitiesKt.logD(LOAD, "Empty list or null");
+            String result = (cards.isEmpty()) ? "List don't have any elements" : "It's not possible load list elements";
             messageStatus.setVisibility(View.VISIBLE);
             messageStatus.setText(result);
         }
