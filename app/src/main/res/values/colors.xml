@@ -9,4 +9,5 @@
     <color name="colorTransparent">#0000ffff</color>
 <!--    Login fonts-->
     <color name="colorLoginFont">#ffff</color>
+    <color name="colorLinkedin">#4875B4</color>
 </resources>

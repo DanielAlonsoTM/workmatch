@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activities.login.RegisterActivity"
-        android:background="@drawable/gradient_login">
+        android:background="@drawable/gradient_background">
 
     <ScrollView
             android:id="@+id/register_form"

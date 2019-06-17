@@ -4,6 +4,7 @@
     <string name="title_messages">Mensajes</string>
     <string name="title_profile">Perfil</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_settings">Configuraciones</string>
     <!-- Strings related to login or Register-->
     <string name="promp_name">Nombre</string>
     <string name="prompt_email">Email</string>
@@ -29,4 +30,15 @@
     <!--    ActionBar   -->
     <string name="actbar_settings">Configuración</string>
     <string name="actbar_messages">Mensajes</string>
+    <!--    Configurations-->
+    <string name="edit_profile">Editar perfil</string>
+    <string name="change_password">Cambiar Contraseña</string>
+    <string name="search_jobs_config">Configurar Busqueda de Empleos</string>
+    <string name="find_notifies">Encontrar Notificaciones</string>
+    <string name="notifies">Notificaciones</string>
+    <string name="show_location">Mostrar Ubicación</string>
+    <!--    Register-->
+    <string name="register_email">Registrarse con Correo</string>
+    <string name="register_google">Registrarse con Google</string>
+    <string name="register_linkdn">Registrarse con Linkdn</string>
 </resources>

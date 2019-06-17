@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.activities.chat.ChatActivity;
 import cl.ponceleiva.workmatch.activities.chat.MatchListActivity;
-import cl.ponceleiva.workmatch.activities.login.UserTypeActivity;
+import cl.ponceleiva.workmatch.activities.settings.SettingsActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
 
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Card> cardList = new ArrayList<>();
 
     private ImageButton messagesButton;
+    private ImageButton settingsButtons;
 
     private ProgressBar progressBar;
     private TextView messageStatus;
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         messagesButton = findViewById(R.id.actionbar_messages);
+        settingsButtons = findViewById(R.id.actionbar_settings);
 
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -155,6 +157,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, MatchListActivity.class));
+            }
+        });
+
+        settingsButtons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
 

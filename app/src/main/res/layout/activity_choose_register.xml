@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.login.ChooseRegisterActivity"
+        android:background="@drawable/gradient_background">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/layout_register"
+                android:gravity="center"
+                android:orientation="vertical">
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_launcher_round"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/app_name"
+                    android:textSize="50sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/layout_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="60dp"
+                android:divider="@drawable/buttons_tall_divider"
+                android:showDividers="middle"
+                android:orientation="vertical">
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/register_google"
+                    android:textAllCaps="false"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:drawableStart="@drawable/googleg_standard_color_18"
+                    android:background="@color/design_default_color_primary"/>
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/register_linkdn"
+                    android:textAllCaps="false"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:background="@color/colorLinkedin"/>
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/register_email"
+                    android:textAllCaps="false"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:background="@drawable/gradient_editprofile_button"/>
+        </LinearLayout>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
