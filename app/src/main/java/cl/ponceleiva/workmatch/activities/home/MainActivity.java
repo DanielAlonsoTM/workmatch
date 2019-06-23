@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                                             intent = new Intent(getApplicationContext(), ProfileActivity.class);
                                             intent.putExtra("userName", doc.get("name").toString());
                                             intent.putExtra("typeUser", doc.get("typeUser").toString());
-                                            intent.putExtra("userImage",doc.get("profileImageUrl").toString());
+                                            intent.putExtra("userImage", doc.get("profileImageUrl").toString());
 
                                             startActivity(intent);
                                         } catch (Exception e) {
@@ -267,17 +267,25 @@ public class MainActivity extends AppCompatActivity {
         objectMap.put("date", timestamp);
 
         try {
-            firebaseFirestore.collection("Users").document(currentUserId).collection(collectionName).add(objectMap);
-
             //Se añade documento a usuario con el que se dio match. --> Redactar mejor xd
             if (collectionName.equals("matches")) {
+                firebaseFirestore
+                        .collection("Users")
+                        .document(currentUserId)
+                        .collection(collectionName)
+                        .document(card.userId + "+" + currentUserId).set(objectMap);
+                firebaseFirestore.collection("Users")
+                        .document(card.userId)
+                        .collection(collectionName)
+                        .document(card.userId + "+" + currentUserId).set(objectMap);
+                UtilitiesKt.logD(FIRESTORE, "Documentos creados");
+            } else if (collectionName.equals("likes")) {
                 firebaseFirestore.collection("Users").document(card.userId).collection(collectionName).add(objectMap);
+                UtilitiesKt.logD(FIRESTORE, "Documento creado");
             }
-            UtilitiesKt.logD(FIRESTORE, "Documento/s creado");
             UtilitiesKt.toastMessage(getApplicationContext(), message);
         } catch (Exception ex) {
             UtilitiesKt.logE(FIRESTORE, "Error al crear documento. Detalle: \n" + ex);
         }
     }
-
 }
