@@ -70,8 +70,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private UserLoginTask mAuthTask = null;
 
-    private static final int RC_SIGN_IN = 9001;
-
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
 
@@ -81,14 +79,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private TextView mLinkRegister;
-
-    //Google Configure Sign in
-    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("506073534138-fl48bjumhenjrejojier08acpn1rccr6.apps.googleusercontent.com")
-            .requestEmail()
-            .build();
-
-    private GoogleSignInClient googleSignInClient;
 
     @Override
     public void onStart() {
@@ -109,7 +99,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         UtilitiesKt.changeColorInitialsViews(this, getWindow());
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
         firebaseAuth = FirebaseAuth.getInstance();
 
         //Validar si usuario ya esta logeado
@@ -149,14 +138,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
-            }
-        });
-
-        ImageButton mGoogleSignInButton = findViewById(R.id.google_sign_in);
-        mGoogleSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
             }
         });
 
@@ -426,51 +407,5 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
-    }
-
-    private void signIn() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                UtilitiesKt.logE(GOOGLE_SIGN_IN, "Google sign in  failed. Details: " + e);
-            }
-        }
-    }
-
-    private void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
-        UtilitiesKt.logD(GOOGLE_SIGN_IN, "firebaseAuthWhitGoogle: " + account.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    UtilitiesKt.logD(GOOGLE_SIGN_IN, "Success");
-
-                    HashMap<String, Object> userData = new HashMap<>();
-                    userData.put("email", account.getEmail());
-                    userData.put("name", account.getDisplayName());
-                    userData.put("profileImageUrl", account.getPhotoUrl().toString());
-                    userData.put("typeUser", "No definido");
-
-                    FirebaseUtilsKt.createUser(userData, firebaseAuth.getUid());
-                } else {
-                    UtilitiesKt.logE(GOOGLE_SIGN_IN, "Failed " + task.getException());
-                    UtilitiesKt.toastMessage(getApplicationContext(), "Authentication failed");
-                }
-            }
-        });
     }
 }

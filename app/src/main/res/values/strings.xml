@@ -37,8 +37,16 @@
     <string name="find_notifies">Encontrar Notificaciones</string>
     <string name="notifies">Notificaciones</string>
     <string name="show_location">Mostrar Ubicación</string>
+    <string name="payments">Opciones de Pago</string>
     <!--    Register-->
     <string name="register_email">Registrarse con Correo</string>
     <string name="register_google">Registrarse con Google</string>
     <string name="register_linkdn">Registrarse con Linkdn</string>
+    <!--    Settings - Add Payment-->
+    <string name="payment_name">Nombre de Propietario</string>
+    <string name="payment_email">E-mail de pago</string>
+    <string name="payment_credit_card_number">N° Tarjeta de Crédito</string>
+    <string name="payment_cvv">CVV</string>
+    <string name="payment_btn">Pagar</string>
+
 </resources>

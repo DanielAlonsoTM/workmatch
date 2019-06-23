@@ -16,12 +16,15 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:orientation="vertical"
                 android:divider="@drawable/empty_tall_divider"
                 android:showDividers="middle"
                 android:layout_above="@+id/edit_profile_btn">
 
             <ImageView
+                    android:id="@+id/profileImage"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
@@ -30,42 +33,40 @@
                     android:background="@drawable/shape_circle"/>
 
             <TextView
+                    android:id="@+id/profileNameUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Nombre de Usuario"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
             <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Descripcion: la marmota carolina se compro una piscina en el la oficina de doña tina chiquitina para comer plasticina"
-                    android:textColor="@color/common_google_signin_btn_text_dark"/>
-            <TextView
+                    android:id="@+id/profileEmailUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Total amigos de facebook"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
             <TextView
+                    android:id="@+id/profilePhoneUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="total contactos de linkedin"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
             <TextView
+                    android:id="@+id/profileCountryUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="total amgios de twitter"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
             <TextView
+                    android:id="@+id/profileUserDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="seguidores de instagram"
+                    android:text="@string/app_name"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
-
         </LinearLayout>
         <Button
                 android:id="@+id/edit_profile_btn"

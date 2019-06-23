@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.activities.chat.ChatActivity;
 import cl.ponceleiva.workmatch.activities.chat.MatchListActivity;
+import cl.ponceleiva.workmatch.activities.login.ChooseRegisterActivity;
+import cl.ponceleiva.workmatch.activities.settings.ProfileActivity;
 import cl.ponceleiva.workmatch.activities.settings.SettingsActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
@@ -54,11 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
     private String currentUserId;
     private String currentUserEmail;
-    private String typeUser;
     private String typeUserInterested;
     private SharedPreferences sharedPreferences;
 
     private Animation fadeIn;
+
+    private Intent intent;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -80,28 +83,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-//        currentUserId = getIntent().getStringExtra("userUid");
-//        currentUserEmail = getIntent().getStringExtra("userEmail");
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
         currentUserId = firebaseAuth.getUid();
         currentUserEmail = firebaseAuth.getCurrentUser().getEmail();
-//        typeUser = FirebaseUtilsKt.getTypeUser(currentUserId, getApplicationContext());
-//        FirebaseUtilsKt.getTypeUser(currentUserId, getApplicationContext());
-//        typeUser = sharedPreferences.getString("typeUser", null);
-
-//        try {
-//            switch (typeUser) {
-//                case "Empleador":
-//                    typeUserInterested = "Profesional";
-//                    break;
-//                case "Profesional":
-//                    typeUserInterested = "Empleador";
-//                    break;
-//            }
-//        } catch (Exception e) {
-//            UtilitiesKt.logE(ERROR, "No se pudo obtener datos de tipo de usuario. Consulte log.");
-//        }
     }
 
     @Override
@@ -109,7 +94,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar(), getResources());
+        sharedPreferences = getSharedPreferences("pref", MODE_PRIVATE);
+
+        UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar());
 
         fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_tobottom);
         fadeIn.setDuration(1500);
@@ -123,14 +110,29 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.content_cards);
         progressBar = findViewById(R.id.progress_bar);
         messageStatus = findViewById(R.id.text_message_status);
+
         swipeCardsView = findViewById(R.id.swipe_cards);
         swipeCardsView.retainLastCard(false);
         swipeCardsView.enableSwipe(true);
 
-        typeUserInterested = "Empleador";
-//        UtilitiesKt.logD("TEST-TipoUsuario", typeUserInterested);
-//        System.out.println(typeUserInterested);
-//        typeUserInterested = "Profesional";
+        //Controlar excepción para esto
+        if (sharedPreferences.getString("typeUser", null) == null) {
+            startActivity(new Intent(this, ChooseRegisterActivity.class));
+        } else {
+            switch (sharedPreferences.getString("typeUser", null)) {
+                case "Profesional":
+                    UtilitiesKt.logD("SHAREDPREFERENCES", "Profesional");
+                    typeUserInterested = "Empleador";
+                    break;
+                case "Empleador":
+                    UtilitiesKt.logD("SHAREDPREFERENCES", "Empleador");
+                    typeUserInterested = "Profesional";
+                    break;
+                default:
+                    UtilitiesKt.logD("SHAREDPREFERENCES", "Something wrong");
+                    break;
+            }
+        }
 
         firebaseFirestore
                 .collection("Users")
@@ -143,7 +145,11 @@ public class MainActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                                 if (!documentSnapshot.get("email").equals(currentUserEmail)) {
                                     UtilitiesKt.logD(SUCCESS, documentSnapshot.getId());
-                                    cardList.add(new Card(documentSnapshot.get("name").toString(), documentSnapshot.get("profileImageUrl").toString(), documentSnapshot.getId()));
+                                    cardList.add(
+                                            new Card(
+                                                    documentSnapshot.get("name").toString(),
+                                                    documentSnapshot.get("profileImageUrl").toString(),
+                                                    documentSnapshot.getId()));
                                 }
                             }
                         } else {
@@ -166,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
-
     }
 
     private void getData(@NonNull List<Card> cards) {
@@ -197,6 +202,30 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onItemClick(View cardImageView, int index) {
+                    firebaseFirestore
+                            .collection("Users")
+                            .document(cardList.get(index).userId)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot doc = task.getResult();
+
+                                        try {
+                                            intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                                            intent.putExtra("userName", doc.get("name").toString());
+                                            intent.putExtra("typeUser", doc.get("typeUser").toString());
+                                            intent.putExtra("userImage",doc.get("profileImageUrl").toString());
+
+                                            startActivity(intent);
+                                        } catch (Exception e) {
+                                            UtilitiesKt.logE(ERROR, "It's not possible get data from document");
+                                            UtilitiesKt.toastMessage(getApplicationContext(), "No es posible cargar el perfil seleccionado. Intente más tarde");
+                                        }
+                                    }
+                                }
+                            });
                 }
             });
         } else {

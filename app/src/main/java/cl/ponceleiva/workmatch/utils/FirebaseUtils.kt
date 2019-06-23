@@ -67,23 +67,3 @@ private fun addUserActionDocument(card: Card, collectionName: String, message: S
     }
 }
 
-fun getTypeUser(userId: String,context: Context) {
-    var typeUser: String = "No definido"
-
-    val sharedPref: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-    db.collection("Users").document(userId).get().addOnSuccessListener { documentSnapshot ->
-        if (documentSnapshot != null) {
-            val editor: SharedPreferences.Editor = sharedPref.edit()
-            editor.putString("typeUser", documentSnapshot["typeUser"].toString())
-            editor.commit()
-        } else {
-            logE("TEST", "Error")
-        }
-    }
-
-    try {
-        typeUser = sharedPref.getString("typeUser",null)
-    } catch (e: java.lang.Exception) {
-        logE(ERROR,"Error en obtención de tipo de usario. Detalle:\n$e")
-    }
-}

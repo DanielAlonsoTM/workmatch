@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import android.view.Window
 import android.view.WindowManager
+import android.widget.TextView
 import cl.ponceleiva.workmatch.R
 
 
@@ -23,7 +24,7 @@ fun toastMessage(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
-fun changeFullColorAppBar(context: Context, window: Window, actBar: ActionBar, resources: Resources) {
+fun changeFullColorAppBar(context: Context, window: Window, actBar: ActionBar) {
     // clear FLAG_TRANSLUCENT_STATUS flag:
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window

@@ -71,6 +71,7 @@
         <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:gravity="start|center"
                 android:textAllCaps="false"
@@ -78,6 +79,19 @@
                 android:textColor="@color/common_google_signin_btn_text_dark"
                 android:drawableEnd="@drawable/ic_action_keyboard_arrow_right_dark"
                 android:background="@color/colorPrimary"/>
+
+        <Button
+                android:id="@+id/payments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:gravity="start|center"
+                android:textAllCaps="false"
+                android:text="@string/payments"
+                android:textColor="@color/common_google_signin_btn_text_dark"
+                android:drawableEnd="@drawable/ic_action_keyboard_arrow_right_dark"
+                android:background="@color/colorPrimaryDark"/>
 
     </LinearLayout>
 

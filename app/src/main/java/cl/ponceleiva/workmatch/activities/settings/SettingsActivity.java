@@ -14,7 +14,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private TextView titleBar;
     private ImageButton backButton;
-    private Button profileButton;
+    private Button profileButton, paymentButton;
     private Intent intentActivity;
 
     @Override
@@ -22,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar(), getResources());
+        UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar());
 
         titleBar = findViewById(R.id.tvTitleOthers);
         titleBar.setText("Configuración");
@@ -31,8 +31,15 @@ public class SettingsActivity extends AppCompatActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intentActivity = new Intent(SettingsActivity.this, ProfileActivity.class);
-                startActivity(intentActivity);
+                startSettingActivity(ProfileActivity.class);
+            }
+        });
+
+        paymentButton = findViewById(R.id.payments);
+        paymentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSettingActivity(PaymentActivity.class);
             }
         });
 
@@ -43,5 +50,10 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void startSettingActivity(Class classActivity) {
+        intentActivity = new Intent(SettingsActivity.this, classActivity);
+        startActivity(intentActivity);
     }
 }

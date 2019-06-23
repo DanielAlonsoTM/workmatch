@@ -70,6 +70,8 @@ public class RegisterActivity extends AppCompatActivity {
                             userData.put("typeUser", typeUser);
                             userData.put("profileImageUrl", "default");
 
+
+                            //Reemplartearse en como se ejecuta esto
                             FirebaseUtilsKt.createUser(userData, mAuth.getUid());
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             intent.putExtra("userUid", mAuth.getUid());

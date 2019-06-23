@@ -42,6 +42,7 @@
                 android:showDividers="middle"
                 android:orientation="vertical">
             <Button
+                    android:id="@+id/btn_register_google"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="20dp"
@@ -52,6 +53,7 @@
                     android:drawableStart="@drawable/googleg_standard_color_18"
                     android:background="@color/design_default_color_primary"/>
             <Button
+                    android:id="@+id/btn_register_linkedin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="20dp"
@@ -61,6 +63,7 @@
                     android:textColor="@color/common_google_signin_btn_text_dark"
                     android:background="@color/colorLinkedin"/>
             <Button
+                    android:id="@+id/btn_register_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="20dp"

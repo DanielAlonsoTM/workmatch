@@ -1,4 +1,4 @@
-package cl.ponceleiva.workmatch.activities.login;
+package cl.ponceleiva.workmatch.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
