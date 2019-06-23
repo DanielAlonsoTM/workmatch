@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_background"
+        tools:context=".activities.settings.ProfileActivity">
+
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?actionBarSize">
+
+            <ImageView
+                    android:id="@+id/profileEditImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:contentDescription="@string/app_name"
+                    android:background="@drawable/shape_circle"/>
+            <EditText
+                    android:id="@+id/profileEditNameUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profileEditImage"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:hint="Hello"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:textColorHint="@color/common_google_signin_btn_text_dark"/>
+            <EditText
+                    android:id="@+id/profileEditEmailUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profileEditNameUser"
+                    android:gravity="center"
+                    android:inputType="textEmailAddress"
+                    android:hint="Email de usuario"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:textColorHint="@color/common_google_signin_btn_text_dark"/>
+            <EditText
+                    android:id="@+id/profileEditPhoneUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profileEditEmailUser"
+                    android:gravity="center"
+                    android:inputType="number|phone"
+                    android:hint="Télefono de usuario"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:textColorHint="@color/common_google_signin_btn_text_dark"/>
+            <EditText
+                    android:id="@+id/profileEditCountryUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profileEditPhoneUser"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:hint="Ciudad de usuario"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:textColorHint="@color/common_google_signin_btn_text_dark"/>
+            <EditText
+                    android:id="@+id/profileEditDescriptionUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/profileEditCountryUser"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:hint="Descripción de usuaurio"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:textColorHint="@color/common_google_signin_btn_text_dark"/>
+            <Button
+                    android:id="@+id/btn_save_changes"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/profileEditDescriptionUser"
+                    android:text="@string/edit_profile_save"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:textAllCaps="false"
+                    android:background="@drawable/gradient_editprofile_button"/>
+        </RelativeLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

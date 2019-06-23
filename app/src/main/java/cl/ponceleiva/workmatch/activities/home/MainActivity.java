@@ -3,7 +3,6 @@ package cl.ponceleiva.workmatch.activities.home;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
@@ -22,7 +21,6 @@ import cl.ponceleiva.workmatch.activities.settings.ProfileActivity;
 import cl.ponceleiva.workmatch.activities.settings.SettingsActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
-
 import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -155,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             UtilitiesKt.logE(ERROR, "It's not possible get data.");
                         }
-                        getData(cardList);
+                        showCards(cardList);
                     }
                 });
 
@@ -174,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getData(@NonNull List<Card> cards) {
+    private void showCards(@NonNull List<Card> cards) {
         if (!cards.isEmpty() && cards != null) {
 
             relativeLayout.startAnimation(fadeIn);

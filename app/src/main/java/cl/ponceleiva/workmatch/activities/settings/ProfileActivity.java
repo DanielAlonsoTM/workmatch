@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
+
 import static cl.ponceleiva.workmatch.utils.Constants.*;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -48,13 +49,20 @@ public class ProfileActivity extends AppCompatActivity {
         tvUserCountry = findViewById(R.id.profileCountryUser);
         tvUserDescription = findViewById(R.id.profileUserDescription);
         imageView = findViewById(R.id.profileImage);
-        btnEditProfile = findViewById(R.id.edit_profile_btn);
 
         backButton = findViewById(R.id.actionbar_back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        btnEditProfile = findViewById(R.id.btn_edit_profile);
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ProfileEditActivity.class));
             }
         });
 
@@ -85,7 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 DocumentSnapshot doc = task.getResult();
 
                                 userName = doc.getString("name");
-                                userImage = doc.get("profileImageUrl").toString();
+                                userImage = (doc.get("profileImageUrl") != null) ? doc.get("profileImageUrl").toString() : "Sin imagen";
                                 userEmail = (doc.get("email") != null) ? doc.get("email").toString() : "E-mail no especificado";
                                 userPhone = (doc.get("phone") != null) ? doc.get("phone").toString() : "Télefono no especificado";
                                 userCountry = (doc.get("country") != null) ? doc.get("country").toString() : "Ciudad no especificada";

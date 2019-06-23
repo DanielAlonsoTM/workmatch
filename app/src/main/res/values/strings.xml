@@ -48,5 +48,6 @@
     <string name="payment_credit_card_number">N° Tarjeta de Crédito</string>
     <string name="payment_cvv">CVV</string>
     <string name="payment_btn">Pagar</string>
-
+    <!--    Edit Profile-->
+    <string name="edit_profile_save">Actualizar datos</string>
 </resources>
