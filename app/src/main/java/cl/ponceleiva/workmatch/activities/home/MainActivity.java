@@ -284,6 +284,10 @@ public class MainActivity extends AppCompatActivity {
                         .document(card.userId)
                         .collection(collectionName)
                         .document(card.userId + "+" + currentUserId).set(objectMap);
+                //Se crea documento en chat, que comparte id de match
+                firebaseFirestore
+                        .collection("chats")
+                        .document(card.userId + "+" + currentUserId);
                 UtilitiesKt.logD(FIRESTORE, "Documentos creados");
             } else if (collectionName.equals("likes")) {
                 firebaseFirestore.collection("Users").document(card.userId).collection(collectionName).add(objectMap);

@@ -1,6 +1,7 @@
 package cl.ponceleiva.workmatch.activities.chat;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,7 @@ import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 
 import static cl.ponceleiva.workmatch.utils.Constants.*;
 
-public class MatchListActivity extends AppCompatActivity {
+public class MatchListActivity extends AppCompatActivity implements MatchContactAdapter.OnMatchContactListener {
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -34,6 +35,8 @@ public class MatchListActivity extends AppCompatActivity {
 
     private TextView titleView, textViewMessage;
     private ImageButton backButton;
+
+    MatchContactAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class MatchListActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         try {
+            adapter = new MatchContactAdapter(matchContacts, this);
             getDataMatches(firebaseAuth.getUid());
         } catch (Exception e) {
             UtilitiesKt.logE(ERROR, "Exception in getDataMatches. Details: " + e);
@@ -96,10 +100,9 @@ public class MatchListActivity extends AppCompatActivity {
                                                             for (DocumentSnapshot userSnapshots : task.getResult().getDocuments()) {
                                                                 if (matchId.contains(userSnapshots.getId())) {
                                                                     matchContacts.add(
-                                                                            new MatchContact("", userSnapshots.get("name").toString()));
+                                                                            new MatchContact("", userSnapshots.get("name").toString(), userSnapshots.getId()));
                                                                 }
                                                             }
-                                                            MatchContactAdapter adapter = new MatchContactAdapter(matchContacts);
                                                             recyclerView.setAdapter(adapter);
                                                             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
@@ -112,5 +115,13 @@ public class MatchListActivity extends AppCompatActivity {
                             }
                         }
                 );
+    }
+
+    @Override
+    public void onMatchContactClick(int position) {
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("contactUserId", matchContacts.get(position).getIdUser());
+        intent.putExtra("currentUserId", firebaseAuth.getUid());
+        startActivity(intent);
     }
 }

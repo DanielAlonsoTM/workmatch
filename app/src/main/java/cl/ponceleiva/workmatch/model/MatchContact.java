@@ -1,13 +1,12 @@
 package cl.ponceleiva.workmatch.model;
 
-import java.util.ArrayList;
-
 public class MatchContact {
-    private String image, name;
+    private String image, name, idUser;
 
-    public MatchContact(String image, String name) {
+    public MatchContact(String image, String name, String idUser) {
         this.image = image;
         this.name = name;
+        this.idUser = idUser;
     }
 
     public String getImage() {
@@ -26,4 +25,11 @@ public class MatchContact {
         this.name = name;
     }
 
+    public String getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
+    }
 }
