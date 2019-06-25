@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,11 +64,11 @@ public class ProfileEditActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot doc = task.getResult();
 
-                            name = (doc.get("name") != null) ? doc.get("name").toString() : "No se pudo cargar el dato";
-                            email = (doc.get("email") != null) ? doc.get("email").toString() : "No se pudo cargar el dato";
-                            phone = (doc.get("phone") != null) ? doc.get("phone").toString() : "No se pudo cargar el dato";
-                            country = (doc.get("country") != null) ? doc.get("country").toString() : "No se pudo cargar el dato";
-                            description = (doc.get("description") != null) ? doc.get("description").toString() : "No se pudo cargar el dato";
+                            name = (doc.get("name") != null) ? doc.get("name").toString() : "No se pudo cargar el nombre de usuario";
+                            email = (doc.get("email") != null) ? doc.get("email").toString() : "No se pudo cargar el email de usuario";
+                            phone = (doc.get("phone") != null) ? doc.get("phone").toString() : "No se pudo cargar el télefono de usuario";
+                            country = (doc.get("country") != null) ? doc.get("country").toString() : "No se pudo cargar la ciudad de usuario";
+                            description = (doc.get("description") != null) ? doc.get("description").toString() : "No se pudo cargar la descripción";
 
                             editTextName.setText(name);
                             editTextEmail.setText(email);
@@ -95,7 +96,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 data.put("description", description);
 
                 try {
-                    firebaseFirestore.collection("Users").document(firebaseAuth.getUid()).set(data);
+                    firebaseFirestore.collection("Users").document(firebaseAuth.getUid()).set(data, SetOptions.merge());
                     UtilitiesKt.toastMessage(getApplicationContext(), "Datos actualizados");
                 } catch (Exception e) {
                     UtilitiesKt.toastMessage(getApplicationContext(), "No se pudo actualizar los datos");

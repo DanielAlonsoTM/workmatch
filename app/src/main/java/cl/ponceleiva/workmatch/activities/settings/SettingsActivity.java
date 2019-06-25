@@ -8,14 +8,18 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.R;
+import cl.ponceleiva.workmatch.activities.SplashActivity;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private TextView titleBar;
     private ImageButton backButton;
-    private Button profileButton, paymentButton;
+    private Button profileButton, paymentButton, closeSessionButton;
     private Intent intentActivity;
+
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,16 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startSettingActivity(PaymentActivity.class);
+            }
+        });
+
+        closeSessionButton = findViewById(R.id.close_session);
+        closeSessionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                finish();
+                startActivity(new Intent(getApplicationContext(), SplashActivity.class));
             }
         });
 

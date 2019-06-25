@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent intent;
 
+    private CollectionReference collectionReference;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
@@ -81,10 +83,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
-        currentUserId = firebaseAuth.getUid();
-        currentUserEmail = firebaseAuth.getCurrentUser().getEmail();
+        try {
+            currentUserId = firebaseAuth.getUid();
+            currentUserEmail = firebaseAuth.getCurrentUser().getEmail();
+        } catch (Exception e) {
+            UtilitiesKt.logE(ERROR, "It's not possible get current user. Details: " + e);
+            startActivity(new Intent(this, ChooseRegisterActivity.class));
+        }
     }
 
     @Override
@@ -112,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         swipeCardsView = findViewById(R.id.swipe_cards);
         swipeCardsView.retainLastCard(false);
         swipeCardsView.enableSwipe(true);
+
+        collectionReference = firebaseFirestore.collection("Users").document(firebaseAuth.getUid()).collection("likes");
 
         //Controlar excepción para esto
         if (sharedPreferences.getString("typeUser", null) == null) {

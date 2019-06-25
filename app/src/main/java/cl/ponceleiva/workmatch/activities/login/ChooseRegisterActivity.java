@@ -73,7 +73,7 @@ public class ChooseRegisterActivity extends AppCompatActivity {
         btnRegisterEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intentActivity = new Intent(ChooseRegisterActivity.this, RegisterActivity.class);
+                intentActivity = new Intent(ChooseRegisterActivity.this, LoginActivity.class);
                 startActivity(intentActivity);
             }
         });

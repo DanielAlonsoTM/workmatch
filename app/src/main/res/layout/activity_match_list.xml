@@ -7,6 +7,14 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradient_background"
         tools:context=".activities.chat.MatchListActivity">
+    <TextView
+            android:id="@+id/text_matchlist_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/match_list_message"
+            android:textSize="30sp"
+            android:textColor="@color/common_google_signin_btn_text_dark"/>
     <ScrollView
             android:id="@+id/register_form"
             android:layout_width="match_parent"

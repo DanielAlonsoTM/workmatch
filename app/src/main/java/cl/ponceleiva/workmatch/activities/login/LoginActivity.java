@@ -395,7 +395,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                UtilitiesKt.toastMessage(getApplicationContext(), "hellos");
+                firebaseAuth
+                        .signInWithEmailAndPassword(mEmail, mPassword)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                } else {
+                                    UtilitiesKt.logE(ERROR, "No es posible inicar sesión");
+                                    UtilitiesKt.toastMessage(getApplicationContext(), "No es posible inicar sesión");
+                                }
+                            }
+                        });
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

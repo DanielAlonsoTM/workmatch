@@ -68,5 +68,4 @@ public class MatchContactAdapter extends
         return matchContacts.size();
     }
 
-
 }

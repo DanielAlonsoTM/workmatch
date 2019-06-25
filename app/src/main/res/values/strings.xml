@@ -38,6 +38,7 @@
     <string name="notifies">Notificaciones</string>
     <string name="show_location">Mostrar Ubicación</string>
     <string name="payments">Opciones de Pago</string>
+    <string name="close_session">Cerrar Sesión</string>
     <!--    Register-->
     <string name="register_email">Registrarse con Correo</string>
     <string name="register_google">Registrarse con Google</string>
@@ -50,4 +51,6 @@
     <string name="payment_btn">Pagar</string>
     <!--    Edit Profile-->
     <string name="edit_profile_save">Actualizar datos</string>
+    <string name="match_list_message">Cargando...</string>
+
 </resources>
