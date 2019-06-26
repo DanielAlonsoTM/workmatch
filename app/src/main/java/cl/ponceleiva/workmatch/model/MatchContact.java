@@ -1,12 +1,12 @@
 package cl.ponceleiva.workmatch.model;
 
 public class MatchContact {
-    private String image, name, idUser;
+    private String image, name, matchId;
 
-    public MatchContact(String image, String name, String idUser) {
+    public MatchContact(String image, String name, String matchId) {
         this.image = image;
         this.name = name;
-        this.idUser = idUser;
+        this.matchId = matchId;
     }
 
     public String getImage() {
@@ -25,11 +25,11 @@ public class MatchContact {
         this.name = name;
     }
 
-    public String getIdUser() {
-        return idUser;
+    public String getMatchId() {
+        return matchId;
     }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
+    public void setMatchId(String matchId) {
+        this.matchId = matchId;
     }
 }

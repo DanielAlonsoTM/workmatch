@@ -6,15 +6,10 @@ import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import cl.ponceleiva.workmatch.activities.chat.ChatActivity;
+import android.widget.*;
 import cl.ponceleiva.workmatch.activities.chat.MatchListActivity;
 import cl.ponceleiva.workmatch.activities.login.ChooseRegisterActivity;
 import cl.ponceleiva.workmatch.activities.settings.ProfileActivity;
@@ -57,28 +52,13 @@ public class MainActivity extends AppCompatActivity {
     private String typeUserInterested;
     private SharedPreferences sharedPreferences;
 
+    private Button btnPublishAnnounce;
+
     private Animation fadeIn;
 
     private Intent intent;
 
     private CollectionReference collectionReference;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
-                    return true;
-                case R.id.navigation_dashboard:
-                    return true;
-                case R.id.navigation_messages:
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     public void onStart() {
@@ -105,15 +85,14 @@ public class MainActivity extends AppCompatActivity {
         fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_tobottom);
         fadeIn.setDuration(1500);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        btnPublishAnnounce = findViewById(R.id.btn_publish_announce);
+
         messagesButton = findViewById(R.id.actionbar_messages);
         settingsButtons = findViewById(R.id.actionbar_settings);
 
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         relativeLayout = findViewById(R.id.content_cards);
         progressBar = findViewById(R.id.progress_bar);
-        messageStatus = findViewById(R.id.text_message_status);
+        messageStatus = findViewById(R.id.textStatus);
 
         swipeCardsView = findViewById(R.id.swipe_cards);
         swipeCardsView.retainLastCard(false);
@@ -275,22 +254,36 @@ public class MainActivity extends AppCompatActivity {
         try {
             //Se añade documento a usuario con el que se dio match. --> Redactar mejor xd
             if (collectionName.equals("matches")) {
+                //Se crea de igual manera el like en el usuario actual
+                firebaseFirestore
+                        .collection("Users")
+                        .document(currentUserId)
+                        .collection(collectionName)
+                        .add(objectMap);
+
+                //Se añade match a usuario actual
                 firebaseFirestore
                         .collection("Users")
                         .document(currentUserId)
                         .collection(collectionName)
                         .document(card.userId + "+" + currentUserId).set(objectMap);
+
+                //Se limpia objeto de datos, y se añade match a usuario con el que se hizo match
+                objectMap.clear();
+                objectMap.put("userid", currentUserId);
+                objectMap.put("date", timestamp);
                 firebaseFirestore.collection("Users")
                         .document(card.userId)
                         .collection(collectionName)
                         .document(card.userId + "+" + currentUserId).set(objectMap);
+
                 //Se crea documento en chat, que comparte id de match
                 firebaseFirestore
                         .collection("chats")
                         .document(card.userId + "+" + currentUserId);
                 UtilitiesKt.logD(FIRESTORE, "Documentos creados");
             } else if (collectionName.equals("likes")) {
-                firebaseFirestore.collection("Users").document(card.userId).collection(collectionName).add(objectMap);
+                firebaseFirestore.collection("Users").document(currentUserId).collection(collectionName).add(objectMap);
                 UtilitiesKt.logD(FIRESTORE, "Documento creado");
             }
             UtilitiesKt.toastMessage(getApplicationContext(), message);

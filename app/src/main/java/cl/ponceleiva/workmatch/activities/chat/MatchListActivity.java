@@ -1,6 +1,5 @@
 package cl.ponceleiva.workmatch.activities.chat;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -69,18 +68,21 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
         firebaseFirestore
                 .collection("Users")
                 .document(userUid)
-                .collection("likes")
+                .collection("matches")
                 .get()
                 .addOnCompleteListener(
                         new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    final String message = (task.getResult().size() == 0) ? "List is empty" : task.getResult().size() + " elemtent/s in the list";
+                                    final String message = (task.getResult().size() == 0) ? "List is empty" : task.getResult().size() + " element/s in the list";
                                     UtilitiesKt.logD(FIRESTORE, message);
+
+                                    final MatchContact matchContact = new MatchContact("", "", "");
 
                                     final List<String> matchId = new ArrayList<>();
                                     for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                                        matchContact.setMatchId(doc.getId());
                                         matchId.add(doc.get("userid").toString());
                                     }
 
@@ -99,8 +101,10 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
 
                                                             for (DocumentSnapshot userSnapshots : task.getResult().getDocuments()) {
                                                                 if (matchId.contains(userSnapshots.getId())) {
-                                                                    matchContacts.add(
-                                                                            new MatchContact("", userSnapshots.get("name").toString(), userSnapshots.getId()));
+                                                                    matchContact.setImage("");
+                                                                    matchContact.setName(userSnapshots.get("name").toString());
+//                                                                    matchContacts.add(new MatchContact("", userSnapshots.get("name").toString(), userSnapshots.getId()));
+                                                                    matchContacts.add(matchContact);
                                                                 }
                                                             }
                                                             recyclerView.setAdapter(adapter);
@@ -120,8 +124,7 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
     @Override
     public void onMatchContactClick(int position) {
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("contactUserId", matchContacts.get(position).getIdUser());
-        intent.putExtra("currentUserId", firebaseAuth.getUid());
+        intent.putExtra("contactUserId", matchContacts.get(position).getMatchId());
         startActivity(intent);
     }
 }
