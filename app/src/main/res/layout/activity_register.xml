@@ -87,9 +87,11 @@
                       android:text="@string/label_radio_group"
                       android:textSize="18sp"
                       android:textColor="@color/cardview_light_background"
+                      android:visibility="gone"
                       android:id="@+id/radioGroup_label"/>
 
             <RadioGroup
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"

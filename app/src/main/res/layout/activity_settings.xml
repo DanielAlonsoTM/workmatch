@@ -27,6 +27,18 @@
                 android:drawableEnd="@drawable/ic_action_keyboard_arrow_right_dark"
                 android:background="@color/colorPrimaryDark"/>
         <Button
+                android:id="@+id/announces"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:gravity="start|center"
+                android:textAllCaps="false"
+                android:text="@string/my_announces"
+                android:textColor="@color/common_google_signin_btn_text_dark"
+                android:drawableEnd="@drawable/ic_action_keyboard_arrow_right_dark"
+                android:background="@color/colorPrimary"/>
+        <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/activity_horizontal_margin"
@@ -36,6 +48,7 @@
                 android:text="@string/change_password"
                 android:textColor="@color/common_google_signin_btn_text_dark"
                 android:drawableEnd="@drawable/ic_action_keyboard_arrow_right_dark"
+                android:visibility="gone"
                 android:background="@color/colorPrimary"/>
         <Button
                 android:layout_width="match_parent"
@@ -46,6 +59,7 @@
                 android:text="@string/search_jobs_config"
                 android:textColor="@color/common_google_signin_btn_text_dark"
                 android:drawableEnd="@drawable/ic_action_keyboard_arrow_right_dark"
+                android:visibility="gone"
                 android:background="@color/colorPrimaryDark"/>
         <Button
                 android:layout_width="match_parent"
@@ -57,6 +71,7 @@
                 android:text="@string/find_notifies"
                 android:textColor="@color/common_google_signin_btn_text_dark"
                 android:drawableEnd="@drawable/ic_action_keyboard_arrow_right_dark"
+                android:visibility="gone"
                 android:background="@color/colorPrimaryDark"/>
         <Button
                 android:layout_width="match_parent"
@@ -67,6 +82,7 @@
                 android:text="@string/notifies"
                 android:textColor="@color/common_google_signin_btn_text_dark"
                 android:drawableEnd="@drawable/ic_action_keyboard_arrow_right_dark"
+                android:visibility="gone"
                 android:background="@color/colorPrimary"/>
         <Button
                 android:layout_width="match_parent"
@@ -78,6 +94,7 @@
                 android:text="@string/show_location"
                 android:textColor="@color/common_google_signin_btn_text_dark"
                 android:drawableEnd="@drawable/ic_action_keyboard_arrow_right_dark"
+                android:visibility="gone"
                 android:background="@color/colorPrimary"/>
 
         <Button

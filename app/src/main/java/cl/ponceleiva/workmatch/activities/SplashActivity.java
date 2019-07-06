@@ -8,7 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import cl.ponceleiva.workmatch.R;
-import cl.ponceleiva.workmatch.activities.home.MainActivity;
+import cl.ponceleiva.workmatch.activities.home.MainEmployerActivity;
+import cl.ponceleiva.workmatch.activities.home.MainProfessionalActivity;
 import cl.ponceleiva.workmatch.activities.login.ChooseRegisterActivity;
 import cl.ponceleiva.workmatch.activities.login.UserTypeActivity;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
@@ -28,17 +29,22 @@ public class SplashActivity extends AppCompatActivity {
 
         UtilitiesKt.changeColorInitialsViews(this, getWindow());
 
+        SharedPreferences sharedPreferences = getSharedPreferences("pref", MODE_PRIVATE);
+        final String typeUser = sharedPreferences.getString("typeUser", null);
+
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
-                    System.out.println(user.getEmail());
-                    SharedPreferences sharedPreferences = getSharedPreferences("pref", MODE_PRIVATE);
-                    if (sharedPreferences.getString("typeUser", null) == null || sharedPreferences.getString("typeUser", null).isEmpty()) {
+                    if (typeUser == null || typeUser.isEmpty()) {
                         initialActivity(UserTypeActivity.class);
                     } else {
-                        initialActivity(MainActivity.class);
+                        if (typeUser.equals("Profesional")) {
+                            initialActivity(MainProfessionalActivity.class);
+                        } else {
+                            initialActivity(MainEmployerActivity.class);
+                        }
                     }
                 } else {
                     initialActivity(ChooseRegisterActivity.class);

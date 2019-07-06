@@ -6,35 +6,25 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activities.home.MainActivity"
+        tools:context=".activities.home.MainEmployerActivity"
         android:background="@drawable/gradient_background">
 
     <RelativeLayout
-            android:id="@+id/content_cards"
+            android:id="@+id/content_announces"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="?actionBarSize">
-        <com.huxq17.swipecardsview.SwipeCardsView
-                android:id="@+id/swipe_cards"
-                android:layout_marginTop="220dp"
-                android:layout_marginEnd="70dp"
-                android:background="@color/colorTransparent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true">
-        </com.huxq17.swipecardsview.SwipeCardsView>
-
-        <TextView
-                android:id="@+id/textStatus"
+        <GridView
+                android:id="@+id/grid_announces"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/swipe_cards"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:columnWidth="30dp"
+                android:numColumns="auto_fit"
+                android:verticalSpacing="4dp"
+                android:horizontalSpacing="4dp"
+                android:stretchMode="columnWidth"
                 android:gravity="center"
-                android:visibility="gone"
-                android:textColor="@color/common_google_signin_btn_text_dark"
-                android:textSize="30sp"/>
-
+                android:layout_centerInParent="true"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -42,7 +32,7 @@
             android:layout_height="match_parent"
             android:gravity="center">
         <ProgressBar
-                android:id="@+id/progress_bar"
+                android:id="@+id/progress_bar_employer"
                 android:indeterminateDrawable="@drawable/shape_ring"
                 android:layout_height="100dp"
                 android:layout_width="100dp"

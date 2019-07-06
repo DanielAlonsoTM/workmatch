@@ -64,11 +64,11 @@ public class ProfileEditActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot doc = task.getResult();
 
-                            name = (doc.get("name") != null) ? doc.get("name").toString() : "No se pudo cargar el nombre de usuario";
-                            email = (doc.get("email") != null) ? doc.get("email").toString() : "No se pudo cargar el email de usuario";
-                            phone = (doc.get("phone") != null) ? doc.get("phone").toString() : "No se pudo cargar el télefono de usuario";
-                            country = (doc.get("country") != null) ? doc.get("country").toString() : "No se pudo cargar la ciudad de usuario";
-                            description = (doc.get("description") != null) ? doc.get("description").toString() : "No se pudo cargar la descripción";
+                            name = (doc.get("name") != null) ? doc.get("name").toString() : "";
+                            email = (doc.get("email") != null) ? doc.get("email").toString() : "";
+                            phone = (doc.get("phone") != null) ? doc.get("phone").toString() : "";
+                            country = (doc.get("country") != null) ? doc.get("country").toString() : "";
+                            description = (doc.get("description") != null) ? doc.get("description").toString() : "";
 
                             editTextName.setText(name);
                             editTextEmail.setText(email);

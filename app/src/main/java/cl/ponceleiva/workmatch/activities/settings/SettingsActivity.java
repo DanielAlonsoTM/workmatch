@@ -1,6 +1,7 @@
 package cl.ponceleiva.workmatch.activities.settings;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +17,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private TextView titleBar;
     private ImageButton backButton;
-    private Button profileButton, paymentButton, closeSessionButton;
+    private Button profileButton, paymentButton, closeSessionButton, announcesButton;
     private Intent intentActivity;
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -39,6 +40,14 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        announcesButton = findViewById(R.id.announces);
+        announcesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         paymentButton = findViewById(R.id.payments);
         paymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,9 +60,12 @@ public class SettingsActivity extends AppCompatActivity {
         closeSessionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences preferences = getSharedPreferences("pref", MODE_PRIVATE);
+                preferences.edit().remove("typeUser").commit();
+                preferences.edit().clear().commit();
                 firebaseAuth.signOut();
-                finish();
                 startActivity(new Intent(getApplicationContext(), SplashActivity.class));
+                finish();
             }
         });
 
@@ -67,7 +79,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void startSettingActivity(Class classActivity) {
-        intentActivity = new Intent(SettingsActivity.this, classActivity);
-        startActivity(intentActivity);
+        startActivity(new Intent(SettingsActivity.this, classActivity));
     }
 }

@@ -7,7 +7,7 @@
               android:orientation="vertical"
               android:paddingTop="@dimen/activity_vertical_margin"
               tools:context=".activities.login.LoginActivity"
-              android:background="@drawable/gradient_login">
+              android:background="@drawable/gradient_background">
 
     <!-- Login progress -->
     <ProgressBar
@@ -96,16 +96,6 @@
                         android:textAllCaps="false"
                         android:background="@drawable/shape_buttons"/>
             </LinearLayout>
-
-            <ImageButton
-                    android:id="@+id/google_sign_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:src="@drawable/common_google_signin_btn_text_dark_normal"
-                    android:contentDescription="@string/app_name"
-                    android:background="@color/colorLoginBottom"/>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

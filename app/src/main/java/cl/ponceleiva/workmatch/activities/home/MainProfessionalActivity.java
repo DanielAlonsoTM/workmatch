@@ -3,7 +3,6 @@ package cl.ponceleiva.workmatch.activities.home;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -23,13 +22,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
+import com.google.firebase.firestore.EventListener;
 import com.huxq17.swipecardsview.SwipeCardsView;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static cl.ponceleiva.workmatch.utils.Constants.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainProfessionalActivity extends AppCompatActivity {
 
     private Date date = new Date();
     private Timestamp timestamp = new Timestamp(date);
@@ -38,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private SwipeCardsView swipeCardsView;
     private List<Card> cardList = new ArrayList<>();
 
-    private ImageButton messagesButton;
-    private ImageButton settingsButtons;
+    private ImageButton messagesButton, settingsButtons;
 
     private ProgressBar progressBar;
     private TextView messageStatus;
@@ -52,13 +52,9 @@ public class MainActivity extends AppCompatActivity {
     private String typeUserInterested;
     private SharedPreferences sharedPreferences;
 
-    private Button btnPublishAnnounce;
-
     private Animation fadeIn;
 
     private Intent intent;
-
-    private CollectionReference collectionReference;
 
     @Override
     public void onStart() {
@@ -76,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_professional);
 
         sharedPreferences = getSharedPreferences("pref", MODE_PRIVATE);
 
@@ -85,20 +81,16 @@ public class MainActivity extends AppCompatActivity {
         fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_tobottom);
         fadeIn.setDuration(1500);
 
-        btnPublishAnnounce = findViewById(R.id.btn_publish_announce);
-
         messagesButton = findViewById(R.id.actionbar_messages);
         settingsButtons = findViewById(R.id.actionbar_settings);
 
         relativeLayout = findViewById(R.id.content_cards);
-        progressBar = findViewById(R.id.progress_bar);
+        progressBar = findViewById(R.id.progress_bar_professional);
         messageStatus = findViewById(R.id.textStatus);
 
         swipeCardsView = findViewById(R.id.swipe_cards);
         swipeCardsView.retainLastCard(false);
         swipeCardsView.enableSwipe(true);
-
-        collectionReference = firebaseFirestore.collection("Users").document(firebaseAuth.getUid()).collection("likes");
 
         //Controlar excepción para esto
         if (sharedPreferences.getString("typeUser", null) == null) {
@@ -122,23 +114,22 @@ public class MainActivity extends AppCompatActivity {
         firebaseFirestore
                 .collection("Users")
                 .whereEqualTo("typeUser", typeUserInterested)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                if (!documentSnapshot.get("email").equals(currentUserEmail)) {
-                                    UtilitiesKt.logD(SUCCESS, documentSnapshot.getId());
-                                    cardList.add(
-                                            new Card(
-                                                    documentSnapshot.get("name").toString(),
-                                                    documentSnapshot.get("profileImageUrl").toString(),
-                                                    documentSnapshot.getId()));
-                                }
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            UtilitiesKt.logE(ERROR, "Listen failed. Details: " + e);
+                            return;
+                        }
+                        for (DocumentSnapshot docQuery : queryDocumentSnapshots.getDocuments()) {
+                            if (!docQuery.get("email").equals(currentUserEmail)) {
+                                UtilitiesKt.logD(SUCCESS, docQuery.getId());
+                                cardList.add(
+                                        new Card(
+                                                docQuery.get("name").toString(),
+                                                docQuery.get("profileImageUrl").toString(),
+                                                docQuery.getId()));
                             }
-                        } else {
-                            UtilitiesKt.logE(ERROR, "It's not possible get data.");
                         }
                         showCards(cardList);
                     }
@@ -147,14 +138,14 @@ public class MainActivity extends AppCompatActivity {
         messagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MatchListActivity.class));
+                startActivity(new Intent(MainProfessionalActivity.this, MatchListActivity.class));
             }
         });
 
         settingsButtons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                startActivity(new Intent(MainProfessionalActivity.this, SettingsActivity.class));
             }
         });
     }
@@ -215,7 +206,8 @@ public class MainActivity extends AppCompatActivity {
             });
         } else {
             UtilitiesKt.logD(LOAD, "Empty list or null");
-            String result = (cards.isEmpty()) ? "List don't have any elements" : "It's not possible load list elements";
+//            String result = (cards.isEmpty()) ? "List don't have any elements" : "It's not possible load list elements";
+            String result = (cards.isEmpty()) ? "Cargando" : "Ha ocurrido un error de conexión";
             messageStatus.setVisibility(View.VISIBLE);
             messageStatus.setText(result);
         }
@@ -258,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 firebaseFirestore
                         .collection("Users")
                         .document(currentUserId)
-                        .collection(collectionName)
+                        .collection("likes")
                         .add(objectMap);
 
                 //Se añade match a usuario actual
@@ -279,14 +271,17 @@ public class MainActivity extends AppCompatActivity {
 
                 //Se crea documento en chat, que comparte id de match
                 firebaseFirestore
-                        .collection("chats")
-                        .document(card.userId + "+" + currentUserId);
+                        .collection("Chats")
+                        .add(card.userId + "+" + currentUserId);
                 UtilitiesKt.logD(FIRESTORE, "Documentos creados");
+
+                UtilitiesKt.toastMessage(getApplicationContext(), message);
             } else if (collectionName.equals("likes")) {
                 firebaseFirestore.collection("Users").document(currentUserId).collection(collectionName).add(objectMap);
                 UtilitiesKt.logD(FIRESTORE, "Documento creado");
+
+                UtilitiesKt.toastMessage(getApplicationContext(), message);
             }
-            UtilitiesKt.toastMessage(getApplicationContext(), message);
         } catch (Exception ex) {
             UtilitiesKt.logE(FIRESTORE, "Error al crear documento. Detalle: \n" + ex);
         }

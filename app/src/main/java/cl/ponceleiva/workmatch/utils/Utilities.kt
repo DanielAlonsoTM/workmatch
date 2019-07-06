@@ -37,7 +37,7 @@ fun changeFullColorAppBar(context: Context, window: Window, actBar: ActionBar) {
 
     actionBar.displayOptions = android.app.ActionBar.DISPLAY_SHOW_CUSTOM
 
-    if (context.javaClass.name.contains("MainActivity")) {
+    if (context.javaClass.name.contains("MainProfessionalActivity") || context.javaClass.name.contains("MainEmployerActivity")) {
         actionBar.setCustomView(R.layout.actionbar_custom)
     } else {
         actionBar.setCustomView(R.layout.actionbar_custom_others)

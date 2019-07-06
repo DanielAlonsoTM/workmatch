@@ -28,20 +28,13 @@ import android.widget.*;
 import cl.ponceleiva.workmatch.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import cl.ponceleiva.workmatch.activities.home.MainActivity;
-import cl.ponceleiva.workmatch.utils.FirebaseUtilsKt;
+import cl.ponceleiva.workmatch.activities.home.MainProfessionalActivity;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 
 import static cl.ponceleiva.workmatch.utils.Constants.*;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.*;
@@ -107,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainProfessionalActivity.class);
                     intent.putExtra("userUid", user.getUid());
                     intent.putExtra("userEmail", user.getEmail());
                     startActivity(intent);
@@ -401,7 +394,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    startActivity(new Intent(getApplicationContext(), MainProfessionalActivity.class));
                                 } else {
                                     UtilitiesKt.logE(ERROR, "No es posible inicar sesión");
                                     UtilitiesKt.toastMessage(getApplicationContext(), "No es posible inicar sesión");

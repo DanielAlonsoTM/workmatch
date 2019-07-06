@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import cl.ponceleiva.workmatch.R;
-import cl.ponceleiva.workmatch.activities.home.MainActivity;
+import cl.ponceleiva.workmatch.activities.home.MainProfessionalActivity;
 import cl.ponceleiva.workmatch.utils.Constants;
 import cl.ponceleiva.workmatch.utils.FirebaseUtilsKt;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
@@ -45,17 +45,9 @@ public class RegisterActivity extends AppCompatActivity {
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int selectId = mRadioGroup.getCheckedRadioButtonId();
-
-                final RadioButton radioButton = findViewById(selectId);
                 final String email = mEmail.getText().toString();
                 final String password = mPassword.getText().toString();
                 final String name = mName.getText().toString();
-                final String typeUser = radioButton.getText().toString();
-
-                if (radioButton.getText() == null) {
-                    return;
-                }
 
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -67,13 +59,13 @@ public class RegisterActivity extends AppCompatActivity {
                             HashMap<String, Object> userData = new HashMap<>();
                             userData.put("name", name);
                             userData.put("email", email);
-                            userData.put("typeUser", typeUser);
+                            userData.put("typeUser", "No definido");
                             userData.put("profileImageUrl", "default");
 
 
                             //Reemplartearse en como se ejecuta esto
                             FirebaseUtilsKt.createUser(userData, mAuth.getUid());
-                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, MainProfessionalActivity.class);
                             intent.putExtra("userUid", mAuth.getUid());
                             intent.putExtra("userEmail", name);
                             startActivity(intent);

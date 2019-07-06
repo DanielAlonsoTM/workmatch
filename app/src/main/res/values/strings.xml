@@ -32,6 +32,7 @@
     <string name="actbar_messages">Mensajes</string>
     <!--    Configurations-->
     <string name="edit_profile">Editar perfil</string>
+    <string name="my_announces">Mis Anuncios</string>
     <string name="change_password">Cambiar Contraseña</string>
     <string name="search_jobs_config">Configurar Busqueda de Empleos</string>
     <string name="find_notifies">Encontrar Notificaciones</string>
@@ -40,9 +41,9 @@
     <string name="payments">Opciones de Pago</string>
     <string name="close_session">Cerrar Sesión</string>
     <!--    Register-->
-    <string name="register_email">Registrarse con Correo</string>
-    <string name="register_google">Registrarse con Google</string>
-    <string name="register_linkdn">Registrarse con Linkdn</string>
+    <string name="register_email">Iniciar Sesión con Correo</string>
+    <string name="register_google">Iniciar Sesión con Google</string>
+    <string name="register_linkdn">Iniciar Sesión con Linkdn</string>
     <!--    Settings - Add Payment-->
     <string name="payment_name">Nombre de Propietario</string>
     <string name="payment_email">E-mail de pago</string>

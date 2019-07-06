@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import cl.ponceleiva.workmatch.R;
-import cl.ponceleiva.workmatch.activities.home.MainActivity;
 import cl.ponceleiva.workmatch.utils.FirebaseUtilsKt;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

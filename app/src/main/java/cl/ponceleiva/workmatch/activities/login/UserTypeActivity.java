@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import cl.ponceleiva.workmatch.R;
-import cl.ponceleiva.workmatch.activities.home.MainActivity;
+import cl.ponceleiva.workmatch.activities.home.MainProfessionalActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
@@ -49,7 +49,7 @@ public class UserTypeActivity extends AppCompatActivity {
             swipeCardsView.enableSwipe(true);
 
 
-            cardList.add(new Card("Linkin park", "empty", "01"));
+            cardList.add(new Card("¿Qué tipo de usuario eres?", "empty", "01"));
 
             CardsAdapter cardsAdapter = new CardsAdapter(cardList, this);
             swipeCardsView.setAdapter(cardsAdapter);
@@ -77,7 +77,7 @@ public class UserTypeActivity extends AppCompatActivity {
                 }
             });
         } else {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainProfessionalActivity.class));
         }
 
     }
@@ -94,6 +94,6 @@ public class UserTypeActivity extends AppCompatActivity {
         editor.putString("typeUser", typeUser);
         editor.commit();
 
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, MainProfessionalActivity.class));
     }
 }
