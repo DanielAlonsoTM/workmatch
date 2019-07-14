@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_background"
-        tools:context=".activities.settings.ProfileActivity">
+        tools:context=".activities.home.AnnounceActivity">
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -31,49 +31,33 @@
                     android:contentDescription="@string/app_name"/>
 
             <TextView
-                    android:id="@+id/profileNameUser"
+                    android:id="@+id/announceTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Nombre de Usuario"
+                    android:text="Announce Title"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
             <TextView
-                    android:id="@+id/profileEmailUser"
+                    android:id="@+id/announcePlace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Total amigos de facebook"
+                    android:text="Announce Place"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
             <TextView
-                    android:id="@+id/profilePhoneUser"
+                    android:id="@+id/announceSalary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="total contactos de linkedin"
+                    android:text="Announce Salary"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
             <TextView
-                    android:id="@+id/profileCountryUser"
+                    android:id="@+id/announceDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="total amgios de twitter"
-                    android:textColor="@color/common_google_signin_btn_text_dark"/>
-            <TextView
-                    android:id="@+id/profileUserDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/app_name"
+                    android:text="Announce Description"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
         </LinearLayout>
-        <Button
-                android:id="@+id/btn_edit_profile"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:layout_alignParentBottom="true"
-                android:text="@string/edit_profile"
-                android:textColor="@color/common_google_signin_btn_text_dark"
-                android:textAllCaps="false"
-                android:background="@drawable/shape_buttons"/>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

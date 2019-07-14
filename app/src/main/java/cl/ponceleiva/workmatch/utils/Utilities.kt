@@ -1,8 +1,10 @@
 package cl.ponceleiva.workmatch.utils
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.ActionBar
 import android.util.Log
 import android.widget.Toast
@@ -10,6 +12,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import cl.ponceleiva.workmatch.R
+import cl.ponceleiva.workmatch.activities.home.AnnounceActivity
 
 
 fun logD(tag: String, message: String) {

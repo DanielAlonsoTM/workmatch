@@ -1,20 +1,25 @@
 package cl.ponceleiva.workmatch.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.TextView;
+import cl.ponceleiva.workmatch.R;
+import cl.ponceleiva.workmatch.activities.home.AnnounceActivity;
+import cl.ponceleiva.workmatch.model.Announce;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 
 import java.util.List;
 
 public class AnnouncesAdapter extends BaseAdapter {
 
-    List<String> listAnnounces;
-    Context context;
+    private List<Announce> listAnnounces;
+    private Context context;
 
-    public AnnouncesAdapter(List<String> listAnnounces, Context context) {
+    public AnnouncesAdapter(List<Announce> listAnnounces, Context context) {
         this.listAnnounces = listAnnounces;
         this.context = context;
     }
@@ -35,20 +40,33 @@ public class AnnouncesAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        final Button button;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View gridView;
+
         if (convertView == null) {
-            button = new Button(context);
-            button.setText(listAnnounces.get(position));
-            button.setOnClickListener(new View.OnClickListener() {
+            gridView = new View(context);
+            gridView = inflater.inflate(R.layout.item_announce, null);
+            TextView title, date;
+            title = gridView.findViewById(R.id.announce_title);
+            date = gridView.findViewById(R.id.announce_date);
+
+            title.setText(listAnnounces.get(position).getTitle());
+            date.setText(listAnnounces.get(position).getDate());
+
+            gridView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UtilitiesKt.toastMessage(context, button.getText().toString());
+                    Intent intent = new Intent(context, AnnounceActivity.class);
+                    intent.putExtra("announceId", listAnnounces.get(position).getAnnounceId());
+                    context.startActivity(intent);
                 }
             });
+
         } else {
-            button = (Button)convertView;
+            gridView = convertView;
         }
-        return button;
+        return gridView;
     }
 }

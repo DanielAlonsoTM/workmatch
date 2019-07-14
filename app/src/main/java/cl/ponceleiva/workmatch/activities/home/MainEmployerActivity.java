@@ -1,7 +1,6 @@
 package cl.ponceleiva.workmatch.activities.home;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,12 +9,11 @@ import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.activities.chat.MatchListActivity;
 import cl.ponceleiva.workmatch.activities.settings.SettingsActivity;
 import cl.ponceleiva.workmatch.adapter.AnnouncesAdapter;
+import cl.ponceleiva.workmatch.model.Announce;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
-
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +32,7 @@ public class MainEmployerActivity extends AppCompatActivity {
 
     private Button publishAnnounceButton;
 
-    private List<String> announces = new ArrayList<>();
+    private List<Announce> announces = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +50,12 @@ public class MainEmployerActivity extends AppCompatActivity {
 
         gridViewAnnounces = findViewById(R.id.grid_announces);
 
+        progressBar = findViewById(R.id.progress_bar_employer);
+
         firebaseFirestore
                 .collection("Announces")
                 .whereEqualTo("userId", firebaseAuth.getUid())
+                .orderBy("date")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -65,8 +66,17 @@ public class MainEmployerActivity extends AppCompatActivity {
 
                         UtilitiesKt.logD("GETELEMENTS", String.valueOf(queryDocumentSnapshots.size()));
 
+                        progressBar.setVisibility(View.GONE);
+                        announces.clear();
                         for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
-                            announces.add(doc.get("title").toString());
+                            announces.add(
+                                    new Announce(
+                                            doc.getId(),
+                                            doc.get("title").toString(),
+                                            "",
+                                            doc.getDate("date").toLocaleString()
+                                    )
+                            );
                         }
                         gridViewAnnounces.setAdapter(announcesAdapter);
 
