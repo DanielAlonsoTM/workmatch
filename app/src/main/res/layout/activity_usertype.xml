@@ -18,13 +18,33 @@
                 android:layout_centerInParent="true">
         </com.huxq17.swipecardsview.SwipeCardsView>
         <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_below="@id/swipe_cards_user_type"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_alignParentStart="true"
+                android:drawableStart="@drawable/ic_action_laptop_mac_dark"
+                android:drawablePadding="@dimen/activity_horizontal_margin"
                 android:gravity="center"
-                android:text="Seleciona tu perfil"
-                android:textSize="25sp"
+                android:text="Profesional"
+                android:textSize="20sp"
                 android:textAllCaps="true"
                 android:textColor="@color/common_google_signin_btn_text_dark"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@id/swipe_cards_user_type"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_alignParentEnd="true"
+                android:drawableEnd="@drawable/ic_action_business_dark"
+                android:drawablePadding="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="Empleador"
+                android:textSize="20sp"
+                android:textAllCaps="true"
+                android:textColor="@color/common_google_signin_btn_text_dark"/>
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

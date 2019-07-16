@@ -50,7 +50,7 @@ public class UserTypeActivity extends AppCompatActivity {
             swipeCardsView.enableSwipe(true);
 
 
-            cardList.add(new Card("¿Qué tipo de usuario eres?", "empty", "01"));
+            cardList.add(new Card("¿Qué tipo de usuario eres?\nMueve hacia izquierda o derecha", "empty", "01"));
 
             CardsAdapter cardsAdapter = new CardsAdapter(cardList, this);
             swipeCardsView.setAdapter(cardsAdapter);
