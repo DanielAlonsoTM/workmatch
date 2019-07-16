@@ -66,11 +66,20 @@ private fun addUserActionDocument(card: Card, collectionName: String, message: S
     }
 }
 
-fun createChat(context: Context, userId: String, announceId: String) {
+fun createChat(context: Context, professionalId: String, announceId: String, employerId: String) {
     val data = java.util.HashMap<String, Any>()
-
+    val timestamp = Timestamp(date)
     try {
-        db.collection("Chats").document("$announceId+$userId").set(data)
+        db.collection("Chats").document("$announceId+$professionalId").set(data)
+
+        data["userid"] = employerId
+        data["date"] = timestamp
+        db.collection("Users").document(professionalId).collection("matches").document("$announceId+$professionalId").set(data)
+        data.clear()
+
+        data["userid"] = professionalId
+        data["date"] = timestamp
+        db.collection("Users").document(employerId).collection("matches").document("$announceId+$professionalId").set(data)
         toastMessage(context, "Chat creado")
     } catch (ex: Exception) {
         logE(ERROR, "Error when try to create document. Details: \n$ex")

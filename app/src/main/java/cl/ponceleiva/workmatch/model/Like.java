@@ -1,12 +1,12 @@
 package cl.ponceleiva.workmatch.model;
 
 public class Like {
-    private String name, image, idUser, idAnnounce;
+    private String name, image, idProfessional, idAnnounce;
 
-    public Like(String name, String image, String idUser, String idAnnounce) {
+    public Like(String name, String image, String idProfessional, String idAnnounce) {
         this.name = name;
         this.image = image;
-        this.idUser = idUser;
+        this.idProfessional = idProfessional;
         this.idAnnounce = idAnnounce;
     }
 
@@ -26,12 +26,12 @@ public class Like {
         this.image = image;
     }
 
-    public String getIdUser() {
-        return idUser;
+    public String getIdProfessional() {
+        return idProfessional;
     }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
+    public void setIdProfessional(String idProfessional) {
+        this.idProfessional = idProfessional;
     }
 
     public String getIdAnnounce() {

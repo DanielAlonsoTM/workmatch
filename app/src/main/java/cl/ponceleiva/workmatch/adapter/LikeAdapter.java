@@ -79,8 +79,7 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
             public void onClick(View v) {
                 matchView.setImageResource(R.drawable.ic_action_favorite_dark);
                 UtilitiesKt.toastMessage(context, "Match! " + firebaseAuth.getUid());
-                FirebaseUtilsKt.createChat(context, like.getIdUser(), like.getIdAnnounce());
-                System.out.println("Match! " + like.getIdUser() + "=" + firebaseAuth.getUid());
+                FirebaseUtilsKt.createChat(context, like.getIdProfessional(), like.getIdAnnounce(), firebaseAuth.getUid());
             }
         });
         textView.setText(like.getName());
