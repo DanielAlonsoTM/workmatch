@@ -3,6 +3,7 @@ package cl.ponceleiva.workmatch.activities.home;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -16,13 +17,13 @@ import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
 import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
-import com.google.firebase.firestore.EventListener;
 import com.huxq17.swipecardsview.SwipeCardsView;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 import static cl.ponceleiva.workmatch.utils.Constants.*;
@@ -32,7 +33,7 @@ public class MainProfessionalActivity extends AppCompatActivity {
     private Date date = new Date();
     private Timestamp timestamp = new Timestamp(date);
 
-    private RelativeLayout relativeLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private SwipeCardsView swipeCardsView;
     private List<Card> cardList = new ArrayList<>();
 
@@ -81,7 +82,7 @@ public class MainProfessionalActivity extends AppCompatActivity {
         messagesButton = findViewById(R.id.actionbar_messages);
         settingsButtons = findViewById(R.id.actionbar_settings);
 
-        relativeLayout = findViewById(R.id.content_cards);
+        swipeRefreshLayout = findViewById(R.id.content_cards);
         progressBar = findViewById(R.id.progress_bar_professional);
         messageStatus = findViewById(R.id.textStatus);
 
@@ -108,26 +109,59 @@ public class MainProfessionalActivity extends AppCompatActivity {
             }
         }
 
+//        firebaseFirestore
+//                .collection("Announces")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+//                        if (e != null) {
+//                            UtilitiesKt.logE(ERROR, "Listen failed. Details: " + e);
+//                            return;
+//                        }
+//                        cardList.clear();
+//                        for (DocumentSnapshot docQuery : queryDocumentSnapshots.getDocuments()) {
+//                            UtilitiesKt.logD(SUCCESS, docQuery.getId());
+//                            cardList.add(
+//                                    new Card(
+//                                            docQuery.getString("title"),
+//                                            docQuery.getString("image"),
+//                                            docQuery.getId()));
+//                        }
+//                        showCards(cardList);
+//                    }
+//                });
+
         firebaseFirestore
                 .collection("Announces")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            UtilitiesKt.logE(ERROR, "Listen failed. Details: " + e);
-                            return;
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            UtilitiesKt.logE(ERROR, "Fail to get announces. Details " + task.getException());
+                        } else {
+                            cardList.clear();
+                            for (DocumentSnapshot docQuery : task.getResult().getDocuments()) {
+                                UtilitiesKt.logD(SUCCESS, docQuery.getId());
+                                cardList.add(
+                                        new Card(
+                                                docQuery.getString("title"),
+                                                docQuery.getString("image"),
+                                                docQuery.getId()));
+                            }
+                            showCards(cardList);
                         }
-                        for (DocumentSnapshot docQuery : queryDocumentSnapshots.getDocuments()) {
-                            UtilitiesKt.logD(SUCCESS, docQuery.getId());
-                            cardList.add(
-                                    new Card(
-                                            docQuery.getString("title"),
-                                            docQuery.getString("image"),
-                                            docQuery.getId()));
-                        }
-                        showCards(cardList);
                     }
                 });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
 
         messagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +180,7 @@ public class MainProfessionalActivity extends AppCompatActivity {
 
     private void showCards(@NonNull List<Card> cards) {
         if (!cards.isEmpty() && cards != null) {
-            relativeLayout.startAnimation(fadeIn);
+            swipeRefreshLayout.startAnimation(fadeIn);
             progressBar.setVisibility(View.GONE);
 
             UtilitiesKt.logD(LIST, cards.size() + " elementos en la lista");

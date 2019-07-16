@@ -17,7 +17,7 @@
             <ImageView
                     android:id="@+id/announce_image"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="150dp"
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:src="@mipmap/ic_launcher_round"/>
             <LinearLayout

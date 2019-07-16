@@ -78,7 +78,8 @@ public class PublishAnnounceActivity extends AppCompatActivity {
                         Map<String, Object> data = new HashMap<>();
                         data.put("userId", firebaseAuth.getUid());
                         data.put("title", editTextJobTitle.getText().toString());
-                        data.put("image","-");
+                        data.put("image", "-");
+                        data.put("likes", 0);
                         data.put("phone", editTextContactPhone.getText().toString());
                         data.put("salary", editTextSalary.getText().toString());
                         data.put("place", editTextPlace.getText().toString());
