@@ -6,7 +6,6 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import android.content.Context
-import android.content.SharedPreferences
 import cl.ponceleiva.workmatch.utils.Constants.ERROR
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
@@ -32,7 +31,7 @@ fun createUser(userData: HashMap<String, Any>, idUserDoc: String) {
 
 fun checkMatch(card: Card, currentUserId: String, context: Context) {
     //Checkear en la lista del usuario B (al que se dio like), si el usuario A (usuario de la sesión actual)
-    db.collection("Users").document(card.userId).collection("likes").whereEqualTo("userid", currentUserId).get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+    db.collection("Users").document(card.announceId).collection("likes").whereEqualTo("userid", currentUserId).get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
         if (task.isSuccessful) {
             logD(FIRESTORE, "Cantidad de cooincidencias: " + task.result!!.size())
             if (task.result!!.size() == 1 && task.result != null) {
@@ -50,7 +49,7 @@ private fun addUserActionDocument(card: Card, collectionName: String, message: S
     val objectMap = java.util.HashMap<String, Any>()
     val timestamp = Timestamp(date)
 
-    objectMap["userid"] = card.userId
+    objectMap["userid"] = card.announceId
     objectMap["date"] = timestamp
 
     try {
@@ -58,7 +57,7 @@ private fun addUserActionDocument(card: Card, collectionName: String, message: S
 
         //Se añade documento a usuario con el que se dio match. --> Redactar mejor xd
         if (collectionName == "matches") {
-            db.collection("Users").document(card.userId).collection(collectionName).add(objectMap)
+            db.collection("Users").document(card.announceId).collection(collectionName).add(objectMap)
         }
         logD(FIRESTORE, "Documento/s creado")
         toastMessage(context, message)
@@ -67,3 +66,13 @@ private fun addUserActionDocument(card: Card, collectionName: String, message: S
     }
 }
 
+fun createChat(context: Context, userId: String, announceId: String) {
+    val data = java.util.HashMap<String, Any>()
+
+    try {
+        db.collection("Chats").document("$announceId+$userId").set(data)
+        toastMessage(context, "Chat creado")
+    } catch (ex: Exception) {
+        logE(ERROR, "Error when try to create document. Details: \n$ex")
+    }
+}

@@ -11,14 +11,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 import cl.ponceleiva.workmatch.activities.chat.MatchListActivity;
 import cl.ponceleiva.workmatch.activities.login.ChooseRegisterActivity;
-import cl.ponceleiva.workmatch.activities.settings.ProfileActivity;
 import cl.ponceleiva.workmatch.activities.settings.SettingsActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
 import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
@@ -112,8 +109,7 @@ public class MainProfessionalActivity extends AppCompatActivity {
         }
 
         firebaseFirestore
-                .collection("Users")
-                .whereEqualTo("typeUser", typeUserInterested)
+                .collection("Announces")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -122,14 +118,12 @@ public class MainProfessionalActivity extends AppCompatActivity {
                             return;
                         }
                         for (DocumentSnapshot docQuery : queryDocumentSnapshots.getDocuments()) {
-                            if (!docQuery.get("email").equals(currentUserEmail)) {
-                                UtilitiesKt.logD(SUCCESS, docQuery.getId());
-                                cardList.add(
-                                        new Card(
-                                                docQuery.get("name").toString(),
-                                                docQuery.get("profileImageUrl").toString(),
-                                                docQuery.getId()));
-                            }
+                            UtilitiesKt.logD(SUCCESS, docQuery.getId());
+                            cardList.add(
+                                    new Card(
+                                            docQuery.getString("title"),
+                                            docQuery.getString("image"),
+                                            docQuery.getId()));
                         }
                         showCards(cardList);
                     }
@@ -152,7 +146,6 @@ public class MainProfessionalActivity extends AppCompatActivity {
 
     private void showCards(@NonNull List<Card> cards) {
         if (!cards.isEmpty() && cards != null) {
-
             relativeLayout.startAnimation(fadeIn);
             progressBar.setVisibility(View.GONE);
 
@@ -171,117 +164,55 @@ public class MainProfessionalActivity extends AppCompatActivity {
                             UtilitiesKt.toastMessage(getApplicationContext(), "Nope!");
                             break;
                         case RIGHT:
-                            checkMatch(cardList.get(index));
+                            addUserActionDocument(cardList.get(index));
                             break;
                     }
                 }
 
                 @Override
                 public void onItemClick(View cardImageView, int index) {
-                    firebaseFirestore
-                            .collection("Users")
-                            .document(cardList.get(index).userId)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot doc = task.getResult();
-
-                                        try {
-                                            intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                                            intent.putExtra("userName", doc.get("name").toString());
-                                            intent.putExtra("typeUser", doc.get("typeUser").toString());
-                                            intent.putExtra("userImage", doc.get("profileImageUrl").toString());
-
-                                            startActivity(intent);
-                                        } catch (Exception e) {
-                                            UtilitiesKt.logE(ERROR, "It's not possible get data from document");
-                                            UtilitiesKt.toastMessage(getApplicationContext(), "No es posible cargar el perfil seleccionado. Intente más tarde");
-                                        }
-                                    }
-                                }
-                            });
+                    intent = new Intent(getApplicationContext(), AnnounceActivity.class);
+                    intent.putExtra("announceId", cardList.get(index).announceId);
+                    startActivity(intent);
                 }
             });
         } else {
             UtilitiesKt.logD(LOAD, "Empty list or null");
-//            String result = (cards.isEmpty()) ? "List don't have any elements" : "It's not possible load list elements";
             String result = (cards.isEmpty()) ? "Cargando" : "Ha ocurrido un error de conexión";
             messageStatus.setVisibility(View.VISIBLE);
             messageStatus.setText(result);
         }
     }
 
-    private void checkMatch(final @NonNull Card card) {
-        //Checkear en la lista del usuario B (al que se dio like), si el usuario A (usuario de la sesión actual)
-        firebaseFirestore
-                .collection("Users")
-                .document(card.userId)
-                .collection("likes")
-                .whereEqualTo("userid", currentUserId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            UtilitiesKt.logD(FIRESTORE, "Cantidad de cooincidencias: " + task.getResult().size());
-                            if (task.getResult().size() == 1 && task.getResult() != null) {
-                                addUserActionDocument(card, "matches", "Maaatch!");
-                            } else if (task.getResult().size() == 0 && task.getResult() != null) {
-                                addUserActionDocument(card, "likes", "Likeeeeee!");
-                            } else {
-                                UtilitiesKt.logE(FIRESTORE, "Ocurrio un problema con el documento actual");
-                            }
-                        }
-                    }
-                });
-    }
-
-    private void addUserActionDocument(@NonNull Card card, String collectionName, String message) {
+    private void addUserActionDocument(@NonNull Card card) {
         Map<String, Object> objectMap = new HashMap<>();
-        objectMap.put("userid", card.userId);
+        objectMap.put("announceId", card.announceId);
+        objectMap.put("userId", firebaseAuth.getUid());
         objectMap.put("date", timestamp);
 
         try {
-            //Se añade documento a usuario con el que se dio match. --> Redactar mejor xd
-            if (collectionName.equals("matches")) {
-                //Se crea de igual manera el like en el usuario actual
-                firebaseFirestore
-                        .collection("Users")
-                        .document(currentUserId)
-                        .collection("likes")
-                        .add(objectMap);
+            firebaseFirestore
+                    .collection("Users")
+                    .document(currentUserId)
+                    .collection("likes")
+                    .add(objectMap);
 
-                //Se añade match a usuario actual
-                firebaseFirestore
-                        .collection("Users")
-                        .document(currentUserId)
-                        .collection(collectionName)
-                        .document(card.userId + "+" + currentUserId).set(objectMap);
+            firebaseFirestore
+                    .collection("Announces")
+                    .document(card.announceId)
+                    .collection("likes")
+                    .add(objectMap);
 
-                //Se limpia objeto de datos, y se añade match a usuario con el que se hizo match
-                objectMap.clear();
-                objectMap.put("userid", currentUserId);
-                objectMap.put("date", timestamp);
-                firebaseFirestore.collection("Users")
-                        .document(card.userId)
-                        .collection(collectionName)
-                        .document(card.userId + "+" + currentUserId).set(objectMap);
+            objectMap.clear();
+            objectMap.put("likes", FieldValue.increment(1));
 
-                //Se crea documento en chat, que comparte id de match
-                firebaseFirestore
-                        .collection("Chats")
-                        .add(card.userId + "+" + currentUserId);
-                UtilitiesKt.logD(FIRESTORE, "Documentos creados");
 
-                UtilitiesKt.toastMessage(getApplicationContext(), message);
-            } else if (collectionName.equals("likes")) {
-                firebaseFirestore.collection("Users").document(currentUserId).collection(collectionName).add(objectMap);
-                UtilitiesKt.logD(FIRESTORE, "Documento creado");
+            firebaseFirestore
+                    .collection("Announces")
+                    .document(card.announceId)
+                    .set(objectMap, SetOptions.merge());
 
-                UtilitiesKt.toastMessage(getApplicationContext(), message);
-            }
+            UtilitiesKt.toastMessage(getApplicationContext(), "Like!");
         } catch (Exception ex) {
             UtilitiesKt.logE(FIRESTORE, "Error al crear documento. Detalle: \n" + ex);
         }

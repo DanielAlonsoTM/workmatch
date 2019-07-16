@@ -6,11 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.activities.home.AnnounceActivity;
 import cl.ponceleiva.workmatch.model.Announce;
-import cl.ponceleiva.workmatch.utils.UtilitiesKt;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -63,6 +64,9 @@ public class AnnouncesAdapter extends BaseAdapter {
                     context.startActivity(intent);
                 }
             });
+
+            ImageView imageView = gridView.findViewById(R.id.announce_image);
+            Picasso.with(context).load(listAnnounces.get(position).getImage()).into(imageView);
 
         } else {
             gridView = convertView;

@@ -2,12 +2,12 @@ package cl.ponceleiva.workmatch.model;
 
 public class Card {
 
-    public String title, image, userId;
+    public String title, image, announceId;
 
-    public Card(String title, String image, String userId) {
+    public Card(String title, String image, String announceId) {
         this.title = title;
         this.image = image;
-        this.userId = userId;
+        this.announceId = announceId;
     }
 
     public String getTitle() {
@@ -26,11 +26,11 @@ public class Card {
         this.image = image;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getAnnounceId() {
+        return announceId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setAnnounceId(String announceId) {
+        this.announceId = announceId;
     }
 }

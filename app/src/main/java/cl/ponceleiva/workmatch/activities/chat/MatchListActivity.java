@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.adapter.MatchContactAdapter;
@@ -32,7 +33,9 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
     private ArrayList<MatchContact> matchContacts = new ArrayList<>();
     private RecyclerView recyclerView;
 
-    private TextView titleView, textViewMessage;
+    private ProgressBar progressBar;
+
+    private TextView titleView;
     private ImageButton backButton;
 
     MatchContactAdapter adapter;
@@ -44,8 +47,8 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
 
         UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar());
         titleView = findViewById(R.id.tvTitleOthers);
-        textViewMessage = findViewById(R.id.text_matchlist_message);
         backButton = findViewById(R.id.actionbar_back);
+        progressBar = findViewById(R.id.progress_bar_match);
 
         titleView.setText("Matches");
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +60,7 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
 
         recyclerView = findViewById(R.id.recyclerView);
         try {
-            adapter = new MatchContactAdapter(matchContacts, this);
+            adapter = new MatchContactAdapter(matchContacts, this, this);
             getDataMatches(firebaseAuth.getUid());
         } catch (Exception e) {
             UtilitiesKt.logE(ERROR, "Exception in getDataMatches. Details: " + e);
@@ -96,13 +99,13 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
                                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                                                             if (task.getResult().getDocuments().size() > 0) {
-                                                                textViewMessage.setVisibility(View.GONE);
+                                                                progressBar.setVisibility(View.GONE);
                                                             }
 
                                                             for (DocumentSnapshot userSnapshots : task.getResult().getDocuments()) {
                                                                 if (matchId.contains(userSnapshots.getId())) {
-                                                                    matchContact.setImage("");
-                                                                    matchContact.setName(userSnapshots.get("name").toString());
+                                                                    matchContact.setImage(userSnapshots.getString("profileImageUrl"));
+                                                                    matchContact.setName(userSnapshots.getString("name"));
 //                                                                    matchContacts.add(new MatchContact("", userSnapshots.get("name").toString(), userSnapshots.getId()));
                                                                     matchContacts.add(matchContact);
                                                                 }
@@ -113,7 +116,6 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
                                                         }
                                                     });
                                 } else {
-                                    textViewMessage.setText("No se pudo cargar elementos");
                                     UtilitiesKt.logE(FIRESTORE, "It's not possible call bd: " + task);
                                 }
                             }

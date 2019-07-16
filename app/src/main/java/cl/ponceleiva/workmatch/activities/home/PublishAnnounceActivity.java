@@ -1,5 +1,6 @@
 package cl.ponceleiva.workmatch.activities.home;
 
+import android.app.Dialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,10 +26,12 @@ public class PublishAnnounceActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
+    private Dialog dialog;
+
     private TextView titleView;
     private EditText editTextJobTitle, editTextContactPhone, editTextPlace, editTextSalary, editTextJobDescription;
     private ImageButton backButton;
-    private Button publishAnnounceButton;
+    private Button publishAnnounceButton, acceptPriorityButton, declinePriorityButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,8 @@ public class PublishAnnounceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_publish_announce);
 
         UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar());
+
+        dialog = new Dialog(this);
 
         titleView = findViewById(R.id.tvTitleOthers);
         titleView.setText("Publicar Anuncio");
@@ -73,14 +78,14 @@ public class PublishAnnounceActivity extends AppCompatActivity {
                         Map<String, Object> data = new HashMap<>();
                         data.put("userId", firebaseAuth.getUid());
                         data.put("title", editTextJobTitle.getText().toString());
+                        data.put("image","-");
                         data.put("phone", editTextContactPhone.getText().toString());
                         data.put("salary", editTextSalary.getText().toString());
                         data.put("place", editTextPlace.getText().toString());
                         data.put("description", editTextJobDescription.getText().toString());
                         data.put("date", timestamp);
 
-                        firebaseFirestore.collection("Announces").add(data);
-                        UtilitiesKt.toastMessage(getApplicationContext(), "Se ha publicado su anuncio.");
+                        showPopUp(data);
                     } catch (Exception e) {
                         UtilitiesKt.logE(ERROR, "Details: " + e);
                         UtilitiesKt.toastMessage(getApplicationContext(), "No ha sido posible publicar su anuncio.");
@@ -88,5 +93,35 @@ public class PublishAnnounceActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void showPopUp(final Map<String, Object> document) {
+
+        dialog.setContentView(R.layout.popup_pay);
+
+        acceptPriorityButton = dialog.findViewById(R.id.btn_accept_popup);
+        declinePriorityButton = dialog.findViewById(R.id.btn_decline_popup);
+
+        acceptPriorityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                document.put("priority", true);
+                firebaseFirestore.collection("Announces").add(document);
+                UtilitiesKt.toastMessage(getApplicationContext(), "Se ha publicado su anuncio");
+                dialog.dismiss();
+            }
+        });
+
+        declinePriorityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                document.put("priority", false);
+                firebaseFirestore.collection("Announces").add(document);
+                UtilitiesKt.toastMessage(getApplicationContext(), "Se ha publicado su anuncio");
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }

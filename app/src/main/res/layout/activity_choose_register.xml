@@ -51,7 +51,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/common_google_signin_btn_text_dark"
                     android:drawableStart="@drawable/googleg_standard_color_18"
-                    android:background="@color/design_default_color_primary"/>
+                    android:background="@drawable/shape_button_google"/>
             <Button
                     android:id="@+id/btn_register_linkedin"
                     android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package cl.ponceleiva.workmatch.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.R;
 import cl.ponceleiva.workmatch.model.MatchContact;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class MatchContactAdapter extends RecyclerView.Adapter<MatchContactAdapter.ViewHolder> {
+
+    private List<MatchContact> matchContacts;
+    private OnMatchContactListener mOnMatchContactsListener;
+    private Context context;
+
+    public MatchContactAdapter(List<MatchContact> matchContacts, OnMatchContactListener mOnMatchContactsListener, Context context) {
+        this.matchContacts = matchContacts;
+        this.mOnMatchContactsListener = mOnMatchContactsListener;
+        this.context = context;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView imageViewMatch;
@@ -36,14 +48,7 @@ public class MatchContactAdapter extends RecyclerView.Adapter<MatchContactAdapte
         }
     }
 
-    private List<MatchContact> matchContacts;
-    private OnMatchContactListener mOnMatchContactsListener;
-
-    public MatchContactAdapter(List<MatchContact> matchContacts, OnMatchContactListener mOnMatchContactsListener) {
-        this.matchContacts = matchContacts;
-        this.mOnMatchContactsListener = mOnMatchContactsListener;
-    }
-
+    @NonNull
     @Override
     public MatchContactAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -62,8 +67,9 @@ public class MatchContactAdapter extends RecyclerView.Adapter<MatchContactAdapte
         ImageView imageView = viewHolder.imageViewMatch;
         TextView textView = viewHolder.textViewMatch;
 
-        imageView.setImageResource(R.drawable.common_google_signin_btn_icon_dark);
         textView.setText(matchContact.getName());
+        Picasso.with(context).load(matchContacts.get(position).getImage()).into(imageView);
+
     }
 
     @Override

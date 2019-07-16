@@ -29,14 +29,6 @@
                     android:layout_gravity="center"
                     android:src="@mipmap/ic_launcher_round"
                     android:contentDescription="@string/app_name"/>
-
-            <TextView
-                    android:id="@+id/announceTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Announce Title"
-                    android:textColor="@color/common_google_signin_btn_text_dark"/>
             <TextView
                     android:id="@+id/announcePlace"
                     android:layout_width="match_parent"
@@ -58,6 +50,26 @@
                     android:gravity="center"
                     android:text="Announce Description"
                     android:textColor="@color/common_google_signin_btn_text_dark"/>
+            <LinearLayout
+                    android:id="@+id/linearLikes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_action_favorite_dark"
+                        android:contentDescription="@string/app_name"/>
+                <TextView
+                        android:id="@+id/announceLikes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/common_google_signin_btn_text_dark"/>
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

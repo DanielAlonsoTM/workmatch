@@ -117,7 +117,7 @@ public class ChatActivity extends AppCompatActivity {
                     Map<String, Object> messageContent = new HashMap<>();
                     messageContent.put("content", text);
                     messageContent.put("date", dateTimestamp);
-                    messageContent.put("userId", firebaseAuth.getUid());
+                    messageContent.put("announceId", firebaseAuth.getUid());
 
                     firebaseFirestore
                             .collection("Chats")

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import cl.ponceleiva.workmatch.R;
+import cl.ponceleiva.workmatch.activities.home.MainEmployerActivity;
 import cl.ponceleiva.workmatch.activities.home.MainProfessionalActivity;
 import cl.ponceleiva.workmatch.adapter.CardsAdapter;
 import cl.ponceleiva.workmatch.model.Card;
@@ -76,9 +77,10 @@ public class UserTypeActivity extends AppCompatActivity {
                 public void onItemClick(View cardImageView, int index) {
                 }
             });
-        } else {
-            startActivity(new Intent(this, MainProfessionalActivity.class));
         }
+//        else {
+//            startActivity(new Intent(this, MainProfessionalActivity.class));
+//        }
 
     }
 
@@ -94,6 +96,11 @@ public class UserTypeActivity extends AppCompatActivity {
         editor.putString("typeUser", typeUser);
         editor.commit();
 
-        startActivity(new Intent(this, MainProfessionalActivity.class));
+        if (typeUser.equals("Profesional")) {
+            startActivity(new Intent(this, MainProfessionalActivity.class));
+        } else if (typeUser.equals("Empleador")) {
+            startActivity(new Intent(this, MainEmployerActivity.class));
+        }
+
     }
 }

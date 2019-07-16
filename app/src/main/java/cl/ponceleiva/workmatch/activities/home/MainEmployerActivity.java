@@ -13,6 +13,7 @@ import cl.ponceleiva.workmatch.model.Announce;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,19 +44,18 @@ public class MainEmployerActivity extends AppCompatActivity {
 
         messagesButton = findViewById(R.id.actionbar_messages);
         settingsButtons = findViewById(R.id.actionbar_settings);
-
         publishAnnounceButton = findViewById(R.id.btn_publish_announce);
+        gridViewAnnounces = findViewById(R.id.grid_announces);
+        progressBar = findViewById(R.id.progress_bar_employer);
 
         final AnnouncesAdapter announcesAdapter = new AnnouncesAdapter(announces, this);
-
-        gridViewAnnounces = findViewById(R.id.grid_announces);
-
-        progressBar = findViewById(R.id.progress_bar_employer);
+        gridViewAnnounces.setAdapter(announcesAdapter);
 
         firebaseFirestore
                 .collection("Announces")
                 .whereEqualTo("userId", firebaseAuth.getUid())
                 .orderBy("date")
+                .orderBy("priority")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -67,19 +67,18 @@ public class MainEmployerActivity extends AppCompatActivity {
                         UtilitiesKt.logD("GETELEMENTS", String.valueOf(queryDocumentSnapshots.size()));
 
                         progressBar.setVisibility(View.GONE);
-                        announces.clear();
-                        for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+//                        announces.clear();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             announces.add(
                                     new Announce(
                                             doc.getId(),
-                                            doc.get("title").toString(),
-                                            "",
+                                            doc.getString("title"),
+                                            doc.getString("image"),
                                             doc.getDate("date").toLocaleString()
                                     )
                             );
                         }
-                        gridViewAnnounces.setAdapter(announcesAdapter);
-
+                        announcesAdapter.notifyDataSetChanged();
                     }
                 });
 
