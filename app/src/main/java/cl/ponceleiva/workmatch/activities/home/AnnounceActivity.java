@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cl.ponceleiva.workmatch.R;
-import cl.ponceleiva.workmatch.activities.chat.MatchListActivity;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.*;

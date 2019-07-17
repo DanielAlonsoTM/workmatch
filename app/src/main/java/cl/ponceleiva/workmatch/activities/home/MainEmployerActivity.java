@@ -1,6 +1,7 @@
 package cl.ponceleiva.workmatch.activities.home;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import static cl.ponceleiva.workmatch.utils.Constants.ERROR;
 
 public class MainEmployerActivity extends AppCompatActivity {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private GridView gridViewAnnounces;
 
     private ImageButton messagesButton, settingsButtons;
@@ -42,6 +44,7 @@ public class MainEmployerActivity extends AppCompatActivity {
 
         UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar());
 
+        swipeRefreshLayout = findViewById(R.id.content_announces);
         messagesButton = findViewById(R.id.actionbar_messages);
         settingsButtons = findViewById(R.id.actionbar_settings);
         publishAnnounceButton = findViewById(R.id.btn_publish_announce);
@@ -81,6 +84,15 @@ public class MainEmployerActivity extends AppCompatActivity {
                         announcesAdapter.notifyDataSetChanged();
                     }
                 });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
 
         messagesButton.setOnClickListener(new View.OnClickListener() {
             @Override

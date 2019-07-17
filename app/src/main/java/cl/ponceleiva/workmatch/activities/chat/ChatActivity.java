@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 import cl.ponceleiva.workmatch.R;
+import cl.ponceleiva.workmatch.adapter.ChatMessageAdapter;
 import cl.ponceleiva.workmatch.model.ChatMessage;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 
@@ -39,8 +40,7 @@ public class ChatActivity extends AppCompatActivity {
     private ListView listView;
     private ImageButton backButton;
 
-    private List<String> messages;
-    private List<Map<String, Object>> messagesFromFirestore;
+    private List<ChatMessage> messages = new ArrayList<>();
 
     private Intent intent;
     private String contactUserId;
@@ -67,11 +67,7 @@ public class ChatActivity extends AppCompatActivity {
 
         linearLayout.startAnimation(animation);
 
-        messages = new ArrayList<>();
-        messagesFromFirestore = new ArrayList<>();
-
-        final ArrayAdapter adapter = new ArrayAdapter<>(this,
-                R.layout.item_message, messages);
+        final ChatMessageAdapter adapter = new ChatMessageAdapter(this, messages);
 
         listView.setDividerHeight(0);
         listView.setDivider(null);
@@ -94,7 +90,12 @@ public class ChatActivity extends AppCompatActivity {
                         messages.clear();
                         for (QueryDocumentSnapshot queryDoc : queryDocumentSnapshots) {
                             if (queryDoc.get("content") != null) {
-                                messages.add(queryDoc.get("content").toString());
+                                messages.add(
+                                        new ChatMessage(
+                                                queryDoc.getId(),
+                                                queryDoc.getString("userId"),
+                                                queryDoc.getTimestamp("date"),
+                                                queryDoc.getString("content")));
                             }
                         }
                         adapter.notifyDataSetChanged();
@@ -107,8 +108,8 @@ public class ChatActivity extends AppCompatActivity {
                 message.setError(null);
                 String text = message.getText().toString();
                 if (!text.isEmpty()) {
-                    messages.add(text);
-                    adapter.notifyDataSetChanged();
+//                    messages.add(text);
+//                    adapter.notifyDataSetChanged();
                     message.getText().clear();
 
                     currentDate = new Date();
@@ -117,7 +118,7 @@ public class ChatActivity extends AppCompatActivity {
                     Map<String, Object> messageContent = new HashMap<>();
                     messageContent.put("content", text);
                     messageContent.put("date", dateTimestamp);
-                    messageContent.put("announceId", firebaseAuth.getUid());
+                    messageContent.put("userId", firebaseAuth.getUid());
 
                     firebaseFirestore
                             .collection("Chats")
