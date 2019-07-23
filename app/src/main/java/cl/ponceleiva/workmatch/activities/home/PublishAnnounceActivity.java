@@ -116,9 +116,7 @@ public class PublishAnnounceActivity extends AppCompatActivity {
         declinePriorityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                document.put("priority", false);
-                firebaseFirestore.collection("Announces").add(document);
-                UtilitiesKt.toastMessage(getApplicationContext(), "Se ha publicado su anuncio");
+                UtilitiesKt.toastMessage(getApplicationContext(), "No se ha realizado la publicación");
                 dialog.dismiss();
             }
         });

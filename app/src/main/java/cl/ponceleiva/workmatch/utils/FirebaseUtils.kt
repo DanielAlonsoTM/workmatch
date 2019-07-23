@@ -73,11 +73,13 @@ fun createChat(context: Context, professionalId: String, announceId: String, emp
         db.collection("Chats").document("$announceId+$professionalId").set(data)
 
         data["userid"] = employerId
+        data["announceid"] = announceId
         data["date"] = timestamp
         db.collection("Users").document(professionalId).collection("matches").document("$announceId+$professionalId").set(data)
         data.clear()
 
         data["userid"] = professionalId
+        data["announceid"] = announceId
         data["date"] = timestamp
         db.collection("Users").document(employerId).collection("matches").document("$announceId+$professionalId").set(data)
         toastMessage(context, "Chat creado")

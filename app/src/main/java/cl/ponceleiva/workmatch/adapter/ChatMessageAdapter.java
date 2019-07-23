@@ -51,12 +51,12 @@ public class ChatMessageAdapter extends BaseAdapter {
 
             TextView message = view.findViewById(R.id.message_content);
 
-            if (chatMessage.getUserId().equals(firebaseAuth.getUid())) {
-                message.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-            }
-            message.setText(chatMessage.getContent());
+//            if (chatMessage.getUserId().equals(firebaseAuth.getUid())) {
+//                message.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+//            }
 
-//            message.setGravity(View.TEXT_ALIGNMENT_TEXT_END);
+
+            message.setText(chatMessage.getContent());
         } else {
             view = convertView;
         }

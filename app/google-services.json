@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "506073534138-shbh6a6hqlsosl6aufpentovg38o2fnf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cl.ponceleiva.workmatch",
+            "certificate_hash": "5c89e80fc3b95ca653c572b738e5fb2f1bdd342d"
+          }
+        },
+        {
           "client_id": "506073534138-fl48bjumhenjrejojier08acpn1rccr6.apps.googleusercontent.com",
           "client_type": 3
         }

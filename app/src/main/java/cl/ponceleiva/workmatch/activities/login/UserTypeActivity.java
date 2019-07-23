@@ -101,6 +101,5 @@ public class UserTypeActivity extends AppCompatActivity {
         } else if (typeUser.equals("Empleador")) {
             startActivity(new Intent(this, MainEmployerActivity.class));
         }
-
     }
 }

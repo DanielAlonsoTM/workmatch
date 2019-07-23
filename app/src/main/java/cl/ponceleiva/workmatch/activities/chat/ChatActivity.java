@@ -1,11 +1,9 @@
 package cl.ponceleiva.workmatch.activities.chat;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,8 +15,6 @@ import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 
 import static cl.ponceleiva.workmatch.utils.Constants.*;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
@@ -43,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     private List<ChatMessage> messages = new ArrayList<>();
 
     private Intent intent;
-    private String contactUserId;
+    private String chatId;
 
     private Date currentDate;
     private Timestamp dateTimestamp;
@@ -54,7 +50,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         intent = getIntent();
-        contactUserId = intent.getStringExtra("contactUserId");
+        chatId = intent.getStringExtra("chatId");
 
         UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar());
         animation = AnimationUtils.loadAnimation(this, R.anim.fade_totop);
@@ -76,7 +72,7 @@ public class ChatActivity extends AppCompatActivity {
 
         firebaseFirestore
                 .collection("Chats")
-                .document(contactUserId)
+                .document(chatId)
                 .collection("messages")
                 .orderBy("date")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -108,8 +104,6 @@ public class ChatActivity extends AppCompatActivity {
                 message.setError(null);
                 String text = message.getText().toString();
                 if (!text.isEmpty()) {
-//                    messages.add(text);
-//                    adapter.notifyDataSetChanged();
                     message.getText().clear();
 
                     currentDate = new Date();
@@ -122,7 +116,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     firebaseFirestore
                             .collection("Chats")
-                            .document(contactUserId)
+                            .document(chatId)
                             .collection("messages")
                             .add(messageContent);
                 }

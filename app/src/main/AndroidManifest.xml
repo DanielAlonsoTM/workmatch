@@ -44,6 +44,7 @@
         <activity android:name=".activities.login.RegisterActivity"
                   android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".activities.login.UserTypeActivity"
+                  android:launchMode="singleTask"
                   android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".activities.settings.ProfileActivity"/>
         <activity android:name=".activities.settings.SettingsActivity"

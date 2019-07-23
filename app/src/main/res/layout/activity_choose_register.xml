@@ -72,6 +72,7 @@
                     android:text="@string/register_email"
                     android:textAllCaps="false"
                     android:textColor="@color/common_google_signin_btn_text_dark"
+                    android:drawableStart="@drawable/ic_action_mail_dark"
                     android:background="@drawable/shape_buttons"/>
         </LinearLayout>
     </RelativeLayout>

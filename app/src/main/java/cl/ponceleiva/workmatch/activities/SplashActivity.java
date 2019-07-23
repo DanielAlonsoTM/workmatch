@@ -13,12 +13,17 @@ import cl.ponceleiva.workmatch.activities.home.MainProfessionalActivity;
 import cl.ponceleiva.workmatch.activities.login.ChooseRegisterActivity;
 import cl.ponceleiva.workmatch.activities.login.UserTypeActivity;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SplashActivity extends AppCompatActivity {
     private int SPLASH_TIME = 2000;
 
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
 
@@ -36,16 +41,31 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                 if (user != null) {
-                    if (typeUser == null || typeUser.isEmpty()) {
-                        initialActivity(UserTypeActivity.class);
-                    } else {
-                        if (typeUser.equals("Profesional")) {
-                            initialActivity(MainProfessionalActivity.class);
-                        } else {
-                            initialActivity(MainEmployerActivity.class);
-                        }
-                    }
+                    firestore
+                            .collection("Users")
+                            .document(user.getUid())
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        String result = task.getResult().getString("typeUser");
+
+                                        if (result == null || result.equals("No definido")) {
+                                            checkPreferences(typeUser);
+                                        } else {
+                                            if (result.equals("Profesional")) {
+                                                initialActivity(MainProfessionalActivity.class);
+                                            } else if(result.equals("Empleador")){
+                                                initialActivity(MainEmployerActivity.class);
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
                 } else {
                     initialActivity(ChooseRegisterActivity.class);
                 }
@@ -53,6 +73,18 @@ public class SplashActivity extends AppCompatActivity {
         };
 
         firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    private void checkPreferences(String typeUser) {
+        if (typeUser == null || typeUser.isEmpty()) {
+            initialActivity(UserTypeActivity.class);
+        } else {
+            if (typeUser.equals("Profesional")) {
+                initialActivity(MainProfessionalActivity.class);
+            } else {
+                initialActivity(MainEmployerActivity.class);
+            }
+        }
     }
 
     private void initialActivity(final Class activityClass) {

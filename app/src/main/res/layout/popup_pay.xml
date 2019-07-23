@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:gravity="center"
-            android:text="¿Desea realizar pago de $30.000 para dar prioridad a su anuncio?"
+            android:text="Para publicar su anuncio debe pagar un monto de $30.000"
             android:textStyle="bold"
             android:textColor="@color/common_google_signin_btn_text_dark"/>
     <RelativeLayout

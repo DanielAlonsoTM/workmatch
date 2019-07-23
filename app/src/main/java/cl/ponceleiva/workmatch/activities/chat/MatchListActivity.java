@@ -67,10 +67,10 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
         }
     }
 
-    private void getDataMatches(String userUid) {
+    private void getDataMatches(String currentUserId) {
         firebaseFirestore
                 .collection("Users")
-                .document(userUid)
+                .document(currentUserId)
                 .collection("matches")
                 .get()
                 .addOnCompleteListener(
@@ -108,6 +108,11 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
                                                                     matchContact.setName(userSnapshots.getString("name"));
 //                                                                    matchContacts.add(new MatchContact("", userSnapshots.get("name").toString(), userSnapshots.getId()));
                                                                     matchContacts.add(matchContact);
+//                                                                    matchContacts.add(
+//                                                                            new MatchContact(
+//                                                                                    userSnapshots.getString("profileImageUrl"),
+//                                                                                    userSnapshots.getString("name"),
+//                                                                                    task.getResult().getDocuments().get(0).getId()));
                                                                 }
                                                             }
                                                             recyclerView.setAdapter(adapter);
@@ -126,7 +131,8 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
     @Override
     public void onMatchContactClick(int position) {
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("contactUserId", matchContacts.get(position).getMatchId());
+        intent.putExtra("chatId", matchContacts.get(position).getMatchId());
         startActivity(intent);
+//        UtilitiesKt.toastMessage(this, matchContacts.get(position).getMatchId());
     }
 }
