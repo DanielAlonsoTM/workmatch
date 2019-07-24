@@ -30,7 +30,7 @@ import cl.ponceleiva.workmatch.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import cl.ponceleiva.workmatch.activities.home.MainProfessionalActivity;
+import cl.ponceleiva.workmatch.activities.SplashActivity;
 import cl.ponceleiva.workmatch.utils.UtilitiesKt;
 
 import static cl.ponceleiva.workmatch.utils.Constants.*;
@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
-                    Intent intent = new Intent(LoginActivity.this, MainProfessionalActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
                     intent.putExtra("userUid", user.getUid());
                     intent.putExtra("userEmail", user.getEmail());
                     startActivity(intent);
@@ -394,7 +394,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    startActivity(new Intent(getApplicationContext(), MainProfessionalActivity.class));
+                                    startActivity(new Intent(getApplicationContext(), SplashActivity.class));
                                 } else {
                                     UtilitiesKt.logE(ERROR, "No es posible inicar sesión");
                                     UtilitiesKt.toastMessage(getApplicationContext(), "No es posible inicar sesión");
