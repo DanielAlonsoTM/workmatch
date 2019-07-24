@@ -32,8 +32,10 @@
         <activity android:name=".activities.chat.ChatActivity"/>
         <activity android:name=".activities.chat.MatchListActivity"/>
         <activity android:name=".activities.home.MainProfessionalActivity"
+                  android:launchMode="singleTask"
                   android:label="@string/app_name"/>
         <activity android:name=".activities.home.MainEmployerActivity"
+                  android:launchMode="singleTask"
                   android:label="@string/app_name"/>
         <activity android:name=".activities.login.ChooseRegisterActivity"
                   android:launchMode="singleTask"
