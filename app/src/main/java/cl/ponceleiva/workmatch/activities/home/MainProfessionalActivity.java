@@ -44,35 +44,16 @@ public class MainProfessionalActivity extends AppCompatActivity {
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
-    private String currentUserId;
-    private String currentUserEmail;
-    private String typeUserInterested;
-    private SharedPreferences sharedPreferences;
+    private String currentUserId = firebaseAuth.getUid();
 
     private Animation fadeIn;
 
     private Intent intent;
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        try {
-            currentUserId = firebaseAuth.getUid();
-            currentUserEmail = firebaseAuth.getCurrentUser().getEmail();
-        } catch (Exception e) {
-            UtilitiesKt.logE(ERROR, "It's not possible get current user. Details: " + e);
-            startActivity(new Intent(this, ChooseRegisterActivity.class));
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_professional);
-
-        sharedPreferences = getSharedPreferences("pref", MODE_PRIVATE);
 
         UtilitiesKt.changeFullColorAppBar(this, getWindow(), getSupportActionBar());
 
@@ -89,47 +70,6 @@ public class MainProfessionalActivity extends AppCompatActivity {
         swipeCardsView = findViewById(R.id.swipe_cards);
         swipeCardsView.retainLastCard(false);
         swipeCardsView.enableSwipe(true);
-
-        //Controlar excepción para esto
-        if (sharedPreferences.getString("typeUser", null) == null) {
-            startActivity(new Intent(this, ChooseRegisterActivity.class));
-        } else {
-            switch (sharedPreferences.getString("typeUser", null)) {
-                case "Profesional":
-                    UtilitiesKt.logD("SHAREDPREFERENCES", "Profesional");
-                    typeUserInterested = "Empleador";
-                    break;
-                case "Empleador":
-                    UtilitiesKt.logD("SHAREDPREFERENCES", "Empleador");
-                    typeUserInterested = "Profesional";
-                    break;
-                default:
-                    UtilitiesKt.logD("SHAREDPREFERENCES", "Something wrong");
-                    break;
-            }
-        }
-
-//        firebaseFirestore
-//                .collection("Announces")
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-//                        if (e != null) {
-//                            UtilitiesKt.logE(ERROR, "Listen failed. Details: " + e);
-//                            return;
-//                        }
-//                        cardList.clear();
-//                        for (DocumentSnapshot docQuery : queryDocumentSnapshots.getDocuments()) {
-//                            UtilitiesKt.logD(SUCCESS, docQuery.getId());
-//                            cardList.add(
-//                                    new Card(
-//                                            docQuery.getString("title"),
-//                                            docQuery.getString("image"),
-//                                            docQuery.getId()));
-//                        }
-//                        showCards(cardList);
-//                    }
-//                });
 
         firebaseFirestore
                 .collection("Announces")
@@ -149,7 +89,9 @@ public class MainProfessionalActivity extends AppCompatActivity {
                                                 docQuery.getString("image"),
                                                 docQuery.getId()));
                             }
-                            showCards(cardList);
+
+                            checkExistingLike(cardList);
+//                            showCards(cardList);
                         }
                     }
                 });
@@ -176,6 +118,40 @@ public class MainProfessionalActivity extends AppCompatActivity {
                 startActivity(new Intent(MainProfessionalActivity.this, SettingsActivity.class));
             }
         });
+    }
+
+    private void checkExistingLike(final List<Card> cards) {
+        firebaseFirestore
+                .collection("Users")
+                .document(currentUserId)
+                .collection("likes")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> listLikesCurrentUser = task.getResult().getDocuments();
+                            List<Card> cardsToShow = new ArrayList<>();
+
+                            // Obtener lista de documentos a los cuales aún no se ha dado like, en caso de ser primera
+                            // vez se cargan todos los documentos por defecto
+                            if (listLikesCurrentUser.size() > 0) {
+                                for (Card card : cards) {
+                                    for (DocumentSnapshot doc : listLikesCurrentUser) {
+                                        if (!card.announceId.equals(doc.getString("announceId"))) {
+                                            cardsToShow.add(card);
+                                        }
+                                    }
+                                }
+                                showCards(cardsToShow);
+                            } else {
+                                showCards(cards);
+                            }
+                        } else {
+                            UtilitiesKt.logE(ERROR, "It's not possible view 'likes' list for current user.");
+                        }
+                    }
+                });
     }
 
     private void showCards(@NonNull List<Card> cards) {
@@ -251,4 +227,5 @@ public class MainProfessionalActivity extends AppCompatActivity {
             UtilitiesKt.logE(FIRESTORE, "Error al crear documento. Detalle: \n" + ex);
         }
     }
+
 }
