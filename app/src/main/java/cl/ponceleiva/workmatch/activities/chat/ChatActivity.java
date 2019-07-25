@@ -63,18 +63,17 @@ public class ChatActivity extends AppCompatActivity {
 
         linearLayout.startAnimation(animation);
 
-        final ChatMessageAdapter adapter = new ChatMessageAdapter(this, messages);
 
+        listView.smoothScrollToPosition(messages.size() - 1);
         listView.setDividerHeight(0);
         listView.setDivider(null);
-        listView.setAdapter(adapter);
-        listView.smoothScrollToPosition(messages.size() - 1);
+//        listView.setAdapter(chatMessageAdapter);
 
         firebaseFirestore
                 .collection("Chats")
                 .document(chatId)
                 .collection("messages")
-                .orderBy("date")
+                .orderBy("date", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -83,18 +82,23 @@ public class ChatActivity extends AppCompatActivity {
                             return;
                         }
 
+                        List<DocumentSnapshot> messagesSnapshots = queryDocumentSnapshots.getDocuments();
+
                         messages.clear();
-                        for (QueryDocumentSnapshot queryDoc : queryDocumentSnapshots) {
-                            if (queryDoc.get("content") != null) {
-                                messages.add(
-                                        new ChatMessage(
-                                                queryDoc.getId(),
-                                                queryDoc.getString("userId"),
-                                                queryDoc.getTimestamp("date"),
-                                                queryDoc.getString("content")));
-                            }
+
+                        for (DocumentSnapshot docMessages : messagesSnapshots) {
+                            messages.add(
+                                    new ChatMessage(
+                                            docMessages.getId(),
+                                            docMessages.getString("userId"),
+                                            docMessages.getTimestamp("date"),
+                                            docMessages.getString("content")));
                         }
-                        adapter.notifyDataSetChanged();
+
+                        ChatMessageAdapter chatMessageAdapter = new ChatMessageAdapter(getApplicationContext(), messages);
+                        listView.setAdapter(chatMessageAdapter);
+                        chatMessageAdapter.notifyDataSetChanged();
+
                     }
                 });
 
