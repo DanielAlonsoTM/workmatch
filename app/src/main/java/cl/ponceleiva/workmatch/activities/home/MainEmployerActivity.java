@@ -58,7 +58,6 @@ public class MainEmployerActivity extends AppCompatActivity {
                 .collection("Announces")
                 .whereEqualTo("userId", firebaseAuth.getUid())
                 .orderBy("date")
-                .orderBy("priority")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {

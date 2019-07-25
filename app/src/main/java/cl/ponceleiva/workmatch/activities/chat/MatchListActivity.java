@@ -76,43 +76,36 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
                 .addOnCompleteListener(
                         new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    final String message = (task.getResult().size() == 0) ? "List is empty" : task.getResult().size() + " element/s in the list";
+                            public void onComplete(@NonNull final Task<QuerySnapshot> taskMatches) {
+                                if (taskMatches.isSuccessful()) {
+                                    final String message = (taskMatches.getResult().size() == 0) ? "List is empty" : taskMatches.getResult().size() + " element/s in the list";
                                     UtilitiesKt.logD(FIRESTORE, message);
 
-                                    final MatchContact matchContact = new MatchContact("", "", "");
-
-                                    final List<String> matchId = new ArrayList<>();
-                                    for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                                        matchContact.setMatchId(doc.getId());
-                                        matchId.add(doc.get("userid").toString());
-                                    }
-
-                                    //Aquí se buscan los usuarios que que coincidan con la lista matchId anteriormente rescatada
+                                    //Aquí se buscan los usuarios que que coincidan con la lista userMatchId anteriormente rescatada
                                     firebaseFirestore
                                             .collection("Users")
                                             .get()
                                             .addOnCompleteListener(
                                                     new OnCompleteListener<QuerySnapshot>() {
                                                         @Override
-                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> taskUsers) {
 
-                                                            if (task.getResult().getDocuments().size() > 0) {
+                                                            if (taskUsers.getResult().getDocuments().size() > 0) {
                                                                 progressBar.setVisibility(View.GONE);
                                                             }
 
-                                                            for (DocumentSnapshot userSnapshots : task.getResult().getDocuments()) {
-                                                                if (matchId.contains(userSnapshots.getId())) {
-                                                                    matchContact.setImage(userSnapshots.getString("profileImageUrl"));
-                                                                    matchContact.setName(userSnapshots.getString("name"));
-//                                                                    matchContacts.add(new MatchContact("", userSnapshots.get("name").toString(), userSnapshots.getId()));
-                                                                    matchContacts.add(matchContact);
-//                                                                    matchContacts.add(
-//                                                                            new MatchContact(
-//                                                                                    userSnapshots.getString("profileImageUrl"),
-//                                                                                    userSnapshots.getString("name"),
-//                                                                                    task.getResult().getDocuments().get(0).getId()));
+                                                            // Se busca en la lista de usuarios, todos los userid de matchs para obtener
+                                                            // la información de usuario correspondiente
+                                                            for (DocumentSnapshot docMatch : taskMatches.getResult().getDocuments()) {
+                                                                for (DocumentSnapshot userSnapshots : taskUsers.getResult().getDocuments()) {
+                                                                    if (docMatch.getString("userid").equals(userSnapshots.getId())) {
+                                                                        MatchContact contact = new MatchContact(
+                                                                                userSnapshots.getString("profileImageUrl"),
+                                                                                userSnapshots.getString("name"),
+                                                                                docMatch.getId());
+
+                                                                        matchContacts.add(contact);
+                                                                    }
                                                                 }
                                                             }
                                                             recyclerView.setAdapter(adapter);
@@ -121,7 +114,7 @@ public class MatchListActivity extends AppCompatActivity implements MatchContact
                                                         }
                                                     });
                                 } else {
-                                    UtilitiesKt.logE(FIRESTORE, "It's not possible call bd: " + task);
+                                    UtilitiesKt.logE(FIRESTORE, "It's not possible call bd: " + taskMatches);
                                 }
                             }
                         }
